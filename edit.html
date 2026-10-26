@@ -6,11 +6,11 @@
 <title>编辑</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="stylesheet" href="bulma.min.css">
-<link rel="stylesheet" href="bulma-theme.css?v=20261026-15">
+<link rel="stylesheet" href="bulma-theme.css?v=20261026-16">
 </head>
 <body class="edit">
 <section class="section edit-section">
-<div class="container edit-container">
+<div class="edit-container">
   <div class="card mb-4">
     <header class="card-header"><p class="card-header-title">基本设置</p></header>
     <div class="card-content">
@@ -23,14 +23,14 @@
 
   <div id="productList"></div>
 
-  <div class="buttons mt-4">
+  <div class="buttons mt-4 is-right">
     <button id="addBtn" type="button" class="button">新增项目</button>
     <button id="downloadBtn" type="button" class="button">下载 JSON 备份</button>
   </div>
 
   <div class="section-title">常见问题</div>
   <div id="faqList"></div>
-  <div class="buttons mt-4">
+  <div class="buttons mt-4 is-right">
     <button id="addFaqBtn" type="button" class="button">新增常见问题</button>
   </div>
 
@@ -146,7 +146,7 @@ function renderForm(){
     card.className = 'card product mb-4';
     card.innerHTML =
       '<div class="card-content">' +
-      '<div class="level is-mobile"><div class="level-left"><div class="field has-addons"><p class="control order-control"><input class="input orderInput" type="number" min="1" max="999" size="3" inputmode="numeric" autocomplete="off"></p><p class="control"><button type="button" class="button orderBtn">确定</button></p></div></div><div class="level-right"><div class="buttons are-small"><button type="button" class="button upBtn">上移</button><button type="button" class="button downBtn">下移</button><button type="button" class="button is-danger is-outlined delBtn">删除</button></div></div></div>' +
+      '<div class="level is-mobile"><div class="level-left"><div class="field has-addons"><p class="control order-control"><input class="input orderInput" type="number" min="1" max="999" size="3" inputmode="numeric" autocomplete="off"></p><p class="control"><button type="button" class="button orderBtn">确定</button></p></div></div><div class="level-right"><div class="field has-addons tool-addons"><p class="control"><button type="button" class="button is-small upBtn">上移</button></p><p class="control"><button type="button" class="button is-small downBtn">下移</button></p><p class="control"><button type="button" class="button is-small is-danger is-outlined delBtn">删除</button></p></div></div></div>' +
       '<div class="field"><label class="label">名称</label><div class="control"><input class="input pName" type="text"></div></div>' +
       '<div class="field"><label class="label">链接</label><div class="control"><input class="input pUrl" type="text" autocomplete="off"></div></div>' +
       '<div class="field"><label class="label">价格</label><div class="control"><input class="input pPrice" type="number" step="any"></div></div>' +
@@ -183,7 +183,7 @@ function renderForm(){
     card.className = 'card faq mb-4';
     card.innerHTML =
       '<div class="card-content">' +
-      '<div class="faq-head"><div class="buttons are-small is-right"><button type="button" class="button upBtn">上移</button><button type="button" class="button downBtn">下移</button><button type="button" class="button is-danger is-outlined delBtn">删除</button></div></div>' +
+      '<div class="faq-head"><div class="field has-addons tool-addons"><p class="control"><button type="button" class="button is-small upBtn">上移</button></p><p class="control"><button type="button" class="button is-small downBtn">下移</button></p><p class="control"><button type="button" class="button is-small is-danger is-outlined delBtn">删除</button></p></div></div>' +
       '<div class="field"><label class="label">问题</label><div class="control"><input class="input fQuestion" type="text"></div></div>' +
       '<div class="field"><label class="label">回答</label><div class="control"><textarea class="textarea fAnswer"></textarea></div></div>' +
       '<div class="preview-label">预览</div>' +

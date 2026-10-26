@@ -120,14 +120,26 @@
   --bulma-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.4);
 }
 
-/* ============ Layout (widths and one-screen homepage, unchanged) ============ */
+/* ============ Layout: fluid width, centred, not a fixed pixel width ============
+   Previous version used max-width:620px/760px !important to beat
+   Bulma's wide container (960-1344px). That read as a fixed width.
+   Now the Bulma .container class is dropped from the HTML, so there
+   is no wide container to beat and no !important is needed.
+   Width is fluid: 100% of the section on narrow screens (so mobile
+   fills the available width, with the section's own side padding),
+   capped by a rem cap on wide screens (38rem ~ 608px homepage,
+   47.5rem ~ 760px edit, at 16px root, scaling with root font size),
+   and centred by margin-inline:auto, like the reference page:
+   centred, limited on desktop, full on mobile. */
 .site-container {
-  max-width: 620px !important;
-  width: 100% !important;
+  width: 100%;
+  max-width: 38rem;
+  margin-inline: auto;
 }
 .edit-container {
-  max-width: 760px !important;
-  width: 100% !important;
+  width: 100%;
+  max-width: 47.5rem;
+  margin-inline: auto;
 }
 .section {
   padding-top: 2rem;
@@ -141,7 +153,7 @@
     flex-direction: column;
     justify-content: space-between;
   }
-  .site-section .container {
+  .site-section .site-container {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -467,9 +479,11 @@ details p {
    project card's .level head (1.5rem), so the first field sits at
    the same distance in both card types. */
 .faq-head {
+  display: flex;
+  justify-content: flex-end;
   margin-bottom: 1.5rem;
 }
-.faq-head .buttons:last-child {
+.faq-head .field {
   margin-bottom: 0;
 }
 
@@ -556,6 +570,42 @@ details p {
 }
 .edit-section {
   padding-bottom: 110px;
+}
+
+/* ============ Tool addons: up / down / delete, joined like the order
+   control, with no shadow and no hover effect ============
+   Bulma has-addons joins the three buttons into one control
+   (shared borders, square inner corners, same height via the
+   height:100% rule below). Unlike the generic has-addons hover
+   (which darkens the background slightly, as on the order button),
+   these three buttons have no hover change at all, as requested:
+   background, border and colour stay exactly as in the normal
+   state, no shadow, no lift, only the pointer cursor changes.
+   Danger keeps its red text / red border in both states. */
+.tool-addons .button {
+  min-height: 36px;
+  padding: 7px 12px;
+  font-size: 13px;
+  box-shadow: none !important;
+  transform: none !important;
+}
+.tool-addons .button:not(:disabled):hover,
+.tool-addons .button:not(:disabled):active,
+.tool-addons .button:not(:disabled):focus {
+  box-shadow: none !important;
+  transform: none !important;
+  background: #fff !important;
+  border-color: var(--bulma-border) !important;
+  color: var(--bulma-text) !important;
+}
+.tool-addons .button.is-danger.is-outlined:not(:disabled):hover,
+.tool-addons .button.is-danger.is-outlined:not(:disabled):active {
+  background: #fff !important;
+  border-color: var(--bulma-danger) !important;
+  color: var(--bulma-danger) !important;
+}
+.level-right .field {
+  margin-bottom: 0;
 }
 
 /* ============ Order control: Bulma Form addons, as documented ============
