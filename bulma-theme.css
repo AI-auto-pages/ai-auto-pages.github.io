@@ -48,7 +48,14 @@
   --bulma-background: #f3f1ec;
   --bulma-text: #211d19;
   --bulma-text-strong: #14110e;
-  --bulma-text-weak: #8a837b;
+  --bulma-text-weak: #6e675f;
+  /* Primary button text: Bulma defaults invert to the darkest shade,
+     which is dark text on dark teal. Force the light shade so primary
+     buttons read white on teal. Dark mode overrides this back below. */
+  --bulma-primary-invert-l: 96%;
+  /* Inline links: Bulma's link-on-scheme is a bright mid-teal.
+     Force the dark teal so links are readable on paper / light boxes. */
+  --bulma-link-on-scheme-l: 27%;
   --bulma-text-title: #14110e;
   --bulma-border: #e9e5de;
   --bulma-border-weak: #efece6;
@@ -82,6 +89,8 @@
    <html data-theme="dark">, and the @media block at the end covers
    system dark mode for the custom (non-Bulma) boxes. */
 [data-theme="dark"] {
+  --bulma-primary-invert-l: 6%;
+  --bulma-link-on-scheme-l: 68%;
   --bulma-primary-h: 171;
   --bulma-primary-s: 72%;
   --bulma-primary-l: 62%;
@@ -140,17 +149,24 @@
   }
 }
 
-/* ============ Site title: teal-to-gold gradient text, echoing the
-   card-header accent bar. This is new, not part of the kept header. ============ */
+/* ============ Site title: solid ink for readability, with a centred
+   teal-to-gold bar underneath echoing the card-header accent.
+   Gradient text looked black/olive in screenshots and hurt contrast,
+   so the gradient is now a visible bar, not the text itself. ============ */
 .site-container > .title {
   font-size: 30px;
   letter-spacing: 0.04em;
   margin-bottom: 1.6rem;
-  background: linear-gradient(90deg, #0f766e, #b45309);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+  color: var(--bulma-text-strong);
+}
+.site-container > .title::after {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 4px;
+  margin: 12px auto 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #0f766e, #d97706);
 }
 
 /* ============ Cards: white, soft border, layered shadow ============ */
@@ -203,7 +219,12 @@
   margin-left: 4px;
 }
 
-/* ============ Buttons: lift on hover, clear focus, calm disabled ============ */
+/* ============ Buttons ============
+   Standalone primary buttons may lift and gain shadow on hover.
+   Small buttons and Form-addons buttons must NOT lift or shadow:
+   lift breaks the joined input+button line, and on a 30px button
+   a shadow reads as noise, not feedback. There, hover is only
+   a background / border darkening. */
 .button {
   border-radius: var(--bulma-control-radius);
   transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
@@ -218,23 +239,93 @@
   box-shadow: 0 6px 18px rgba(15, 118, 110, 0.28);
 }
 .button.is-primary:not(:disabled):hover {
-  box-shadow: 0 8px 22px rgba(15, 118, 110, 0.34);
+  background-color: #0b5f58;
+  border-color: #0b5f58;
+  box-shadow: 0 10px 28px rgba(15, 118, 110, 0.38);
+  transform: translateY(-1px);
 }
 .button.is-primary:disabled {
-  opacity: 0.55;
+  /* Readable muted disabled, not pale teal with faint text. */
+  opacity: 1;
+  background: #e2e8e6;
+  border-color: #e2e8e6;
+  color: #5f6b68;
   box-shadow: none;
+  transform: none;
 }
 .button.is-danger.is-outlined:hover {
   background: #fef2f2;
+  border-color: #fca5a5;
+  color: #b91c1c;
+  transform: none;
+  box-shadow: none;
+}
+/* Small buttons: larger touch target, no lift, background-only hover. */
+.buttons.are-small .button {
+  min-height: 36px;
+  padding: 7px 12px;
+  font-size: 13px;
+}
+.buttons.are-small .button:not(:disabled):hover {
+  transform: none;
+  box-shadow: none;
+  background: #f8f7f4;
+  border-color: #d9d4cb;
+}
+/* Add buttons: tinted, so they are not lost in the long list. */
+#addBtn,
+#addFaqBtn {
+  background: #f0fdfa;
+  border-color: #99f6e4;
+  color: #0f766e;
+  font-weight: 700;
+}
+/* Small danger button keeps its red hover, not the generic grey hover. */
+.buttons.are-small .button.is-danger.is-outlined:hover {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #b91c1c;
+}
+#addBtn:hover,
+#addFaqBtn:hover {
+  background: #ccfbf1;
+  border-color: #5eead4;
+}
+a:focus-visible,
+.button:focus-visible {
+  outline: 2px solid var(--bulma-primary);
+  outline-offset: 2px;
 }
 
 /* ============ Forms: white fields, teal focus ring ============ */
+.field:not(:last-child) {
+  margin-bottom: 18px;
+}
 .label {
   font-size: 13px;
   font-weight: 650;
   letter-spacing: 0.02em;
   color: var(--bulma-text-strong);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+}
+.input::placeholder,
+.textarea::placeholder {
+  color: #8a837b;
+  opacity: 1;
+}
+.order-control .input::placeholder {
+  /* Order placeholder is the current position, not an empty hint:
+     make it darker so it is not mistaken for a faint placeholder. */
+  color: #6e675f;
+}
+.input[type="number"]::-webkit-outer-spin-button,
+.input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
 .input,
 .textarea,
@@ -251,11 +342,13 @@
 .input:focus-visible,
 .textarea:focus-visible {
   border-color: var(--bulma-primary);
-  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.16);
+  box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.20);
 }
 .textarea {
-  min-height: 96px;
+  min-height: 150px;
   line-height: 1.6;
+  resize: vertical;
+  padding: 12px 14px;
 }
 .select:not(.is-multiple)::after {
   border-color: var(--bulma-text-weak);
@@ -277,18 +370,30 @@
 .detail.show,
 .preview.show {
   display: block;
+  animation: detailIn 0.2s ease;
+}
+@keyframes detailIn {
+  from { opacity: 0; transform: translateY(-2px); }
+  to { opacity: 1; transform: none; }
 }
 .edit .preview {
   display: block;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 .preview p,
 .detail p {
   margin: 8px 0;
+  overflow-wrap: anywhere;
 }
 .detail a,
 .preview a {
   font-weight: 600;
+  color: #0f766e;
+  overflow-wrap: anywhere;
+}
+.detail a:hover,
+.preview a:hover {
+  text-decoration: underline;
 }
 
 /* ============ FAQ: summary as a soft pill, + / - as a badge ============ */
@@ -318,9 +423,9 @@ summary::-webkit-details-marker {
 summary::after {
   content: "+";
   flex: none;
-  width: 22px;
-  height: 22px;
-  line-height: 22px;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
   text-align: center;
   border-radius: 50%;
   background: #fff;
@@ -340,7 +445,7 @@ details[open] summary::after {
 details > div,
 details p {
   margin: 12px 4px 2px;
-  color: var(--bulma-text-weak);
+  color: #55504a;
   font-size: 14px;
   line-height: 1.7;
 }
@@ -376,7 +481,9 @@ details p {
   line-height: 1.6;
   max-height: 320px;
   overflow: auto;
-  margin: 0;
+  /* Gap from the summary above: it was margin:0, so the pre block
+     touched the summary pill. 16px matches the card padding rhythm. */
+  margin: 16px 0 0;
   background: #faf9f6;
   border: 1px solid var(--bulma-border-weak);
   border-radius: 10px;
@@ -385,7 +492,7 @@ details p {
 .edit .preview-label {
   font-size: 13px;
   color: var(--bulma-text-weak);
-  margin: 12px 0 6px;
+  margin: 16px 0 8px;
 }
 .savebar {
   position: fixed;
@@ -405,11 +512,31 @@ details p {
   flex-direction: column;
   gap: 10px;
 }
+@media (min-width: 768px) {
+  /* Desktop: token and save button on one row, so the bar is
+     ~64px tall instead of ~110px and covers far less content. */
+  .savebar-inner {
+    flex-direction: row;
+    align-items: center;
+  }
+  .savebar-inner .input {
+    flex: 1;
+  }
+  .savebar-inner .button.is-fullwidth {
+    width: auto;
+    flex: none;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
 .edit-section {
-  padding-bottom: 150px;
+  padding-bottom: 110px;
 }
 
-/* ============ Order control: Bulma Form addons, as documented ============ */
+/* ============ Order control: Bulma Form addons, as documented ============
+   Joined control rule: the button must stay flat and level with the
+   input. No shadow, no hover lift, no hover shadow - hover is only
+   a background / border change, otherwise the join breaks visually. */
 .field.has-addons {
   align-items: stretch;
 }
@@ -420,6 +547,17 @@ details p {
 .field.has-addons .control .input,
 .field.has-addons .control .button {
   height: 100%;
+}
+.field.has-addons .button {
+  box-shadow: none !important;
+  transform: none !important;
+}
+.field.has-addons .button:not(:disabled):hover,
+.field.has-addons .button:not(:disabled):active {
+  box-shadow: none !important;
+  transform: none !important;
+  background: #f8f7f4;
+  border-color: #d9d4cb;
 }
 .order-control {
   flex: 0 0 80px;
