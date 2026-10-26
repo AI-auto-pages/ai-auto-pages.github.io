@@ -581,27 +581,55 @@ details p {
    these three buttons have no hover change at all, as requested:
    background, border and colour stay exactly as in the normal
    state, no shadow, no lift, only the pointer cursor changes.
-   Danger keeps its red text / red border in both states. */
+   Danger keeps its red text / red border in both states.
+   Root cause of the delete-button thickening (v16 missed this):
+   Bulma 1.0.4 gives every outlined button
+   `.button.is-outlined:hover { --bulma-button-border-width:
+   max(2px, 0.125em) }`, i.e. 1px -> 2px on hover. The earlier
+   tool rule only locked border-color, so the width still jumped.
+   Worse, Bulma computes button padding as
+   `padding-horizontal - var(--bulma-button-border-width)`, so the
+   padding shrinks as the border grows, and with addons' -1px
+   shared border the thicker red border paints over the neighbour's
+   border - that is the "neighbour moved" look. The fix locks both
+   the variable and the property at 1px in every interactive state,
+   including Bulma's .is-hovered / .is-focused / .is-active classes,
+   so hover/active/focus cannot change size, padding or border. */
 .tool-addons .button {
   min-height: 36px;
   padding: 7px 12px;
   font-size: 13px;
   box-shadow: none !important;
   transform: none !important;
+  border-width: 1px;
+  --bulma-button-border-width: 1px;
 }
 .tool-addons .button:not(:disabled):hover,
 .tool-addons .button:not(:disabled):active,
-.tool-addons .button:not(:disabled):focus {
+.tool-addons .button:not(:disabled):focus,
+.tool-addons .button:not(:disabled).is-hovered,
+.tool-addons .button:not(:disabled).is-focused,
+.tool-addons .button:not(:disabled).is-active {
   box-shadow: none !important;
   transform: none !important;
   background: #fff !important;
   border-color: var(--bulma-border) !important;
+  border-width: 1px !important;
+  --bulma-button-border-width: 1px !important;
+  --bulma-button-outer-shadow-alpha: 0 !important;
   color: var(--bulma-text) !important;
 }
 .tool-addons .button.is-danger.is-outlined:not(:disabled):hover,
-.tool-addons .button.is-danger.is-outlined:not(:disabled):active {
+.tool-addons .button.is-danger.is-outlined:not(:disabled):active,
+.tool-addons .button.is-danger.is-outlined:not(:disabled):focus,
+.tool-addons .button.is-danger.is-outlined:not(:disabled).is-hovered,
+.tool-addons .button.is-danger.is-outlined:not(:disabled).is-focused,
+.tool-addons .button.is-danger.is-outlined:not(:disabled).is-active {
   background: #fff !important;
   border-color: var(--bulma-danger) !important;
+  border-width: 1px !important;
+  --bulma-button-border-width: 1px !important;
+  --bulma-button-outer-shadow-alpha: 0 !important;
   color: var(--bulma-danger) !important;
 }
 .level-right .field {
