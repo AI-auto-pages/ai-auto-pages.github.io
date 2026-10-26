@@ -1,72 +1,117 @@
-/* Bulma v1 custom theme for AI-auto-pages, CSS-variables only, no Sass build.
+/* Bulma v1 custom theme for AI-auto-pages, pure CSS-variables method.
+   Official guide (bulma.io/documentation/customize, with-css-variables):
+   keep Bulma's base CSS intact, load this file AFTER bulma.min.css, and
+   create the theme by overwriting Bulma variables under :root. Colour
+   variables are given as HSL components (-h / -s / -l), as Bulma expects,
+   so Bulma's own helpers (is-primary, is-success, soft / light shades)
+   are generated from the same tokens. No Sass build is needed.
    Load order:
-     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+     <link rel="stylesheet" href="bulma.min.css">
      <link rel="stylesheet" href="bulma-theme.css">
    Fonts: Bulma default, deliberately NOT overridden here.
-   Palette: teal primary #0f766e, gold warning #d97706, warm off-white scheme.
-   Card-header keeps the old site's look: gradient background, a teal-to-gold
-   accent bar before the title (::before), and a fading gradient line after
-   the title (::after). */
+   ONLY the card-header look below is carried over from the old site, as
+   the user asked to keep it: gradient background, a teal-to-gold accent
+   bar before the title (::before), and a fading gradient line after
+   the title (::after). Everything else in this file is a fresh design. */
 
 :root {
-  /* Primary: teal #0f766e */
-  --bulma-primary-h: 175;
-  --bulma-primary-s: 77%;
-  --bulma-primary-l: 26%;
-  /* Link uses the same teal */
-  --bulma-link-h: 175;
-  --bulma-link-s: 77%;
-  --bulma-link-l: 26%;
-  /* Warning / accent: gold #d97706 */
+  /* --- Colour tokens (HSL, Bulma style) --- */
+  /* Primary: deep teal, the same family as the card-header accent. */
+  --bulma-primary-h: 174;
+  --bulma-primary-s: 72%;
+  --bulma-primary-l: 27%;
+  /* Link: a touch darker than primary, for readable links on white. */
+  --bulma-link-h: 174;
+  --bulma-link-s: 72%;
+  --bulma-link-l: 24%;
+  /* Info: calm slate-blue, not Bulma's default bright blue. */
+  --bulma-info-h: 210;
+  --bulma-info-s: 32%;
+  --bulma-info-l: 48%;
+  /* Success: soft leaf green, close to teal so it sits with primary. */
+  --bulma-success-h: 158;
+  --bulma-success-s: 52%;
+  --bulma-success-l: 38%;
+  /* Warning / gold accent: kept for the card-header bar and warnings. */
   --bulma-warning-h: 32;
   --bulma-warning-s: 95%;
   --bulma-warning-l: 44%;
-  /* Danger: site red */
-  --bulma-danger-h: 0;
-  --bulma-danger-s: 72%;
-  --bulma-danger-l: 51%;
-  /* Scheme: warm off-white background, warm dark text */
-  --bulma-scheme-main: #f6f5f2;
-  --bulma-scheme-main-bis: #fff;
-  --bulma-text: #1c1917;
-  --bulma-text-strong: #1c1917;
-  --bulma-text-weak: #78716c;
-  --bulma-border: #e9e6e1;
-  --bulma-border-weak: #e9e6e1;
-  /* Radii: cards 10px, controls 8px */
-  --bulma-radius: 8px;
-  --bulma-radius-large: 10px;
-  --bulma-radius-small: 6px;
-  --bulma-card-shadow: 0 8px 24px rgba(28, 25, 23, 0.06);
-  --bulma-box-shadow: 0 8px 24px rgba(28, 25, 23, 0.06);
+  /* Danger: softer, less harsh red than Bulma default. */
+  --bulma-danger-h: 357;
+  --bulma-danger-s: 62%;
+  --bulma-danger-l: 50%;
+
+  /* --- Scheme: warm paper, not stark white, not grey --- */
+  --bulma-scheme-main: #faf9f6;
+  --bulma-scheme-main-bis: #ffffff;
+  --bulma-scheme-main-ter: #f3f1ec;
+  --bulma-background: #f3f1ec;
+  --bulma-text: #211d19;
+  --bulma-text-strong: #14110e;
+  --bulma-text-weak: #8a837b;
+  --bulma-text-title: #14110e;
+  --bulma-border: #e9e5de;
+  --bulma-border-weak: #efece6;
+
+  /* --- Shape: modern, but not bubbly --- */
+  --bulma-radius: 10px;
+  --bulma-radius-large: 14px;
+  --bulma-radius-small: 8px;
+  --bulma-radius-rounded: 9999px;
+
+  /* --- Depth: one layered soft shadow, used by cards and boxes --- */
+  --bulma-shadow: 0 1px 2px rgba(33, 29, 25, 0.05), 0 12px 32px rgba(33, 29, 25, 0.08);
+  --bulma-card-shadow: 0 1px 2px rgba(33, 29, 25, 0.05), 0 12px 32px rgba(33, 29, 25, 0.08);
+  --bulma-box-shadow: 0 1px 2px rgba(33, 29, 25, 0.05), 0 12px 32px rgba(33, 29, 25, 0.08);
+
+  /* --- Type scale: a little larger, a little tighter --- */
+  --bulma-size-normal: 15px;
+  --bulma-body-line-height: 1.65;
+  --bulma-title-weight: 800;
+  --bulma-content-heading-weight: 700;
+
+  /* --- Controls --- */
+  --bulma-control-radius: 10px;
+  --bulma-control-radius-small: 8px;
+  --bulma-input-border-l: 88%;
+  --bulma-input-focus-border-l: 27%;
+  --bulma-button-weight: 600;
 }
 
-[data-theme="dark"],
-.theme-dark {
+/* Dark theme, same tokens, inverted scheme. Bulma applies this when
+   <html data-theme="dark">, and the @media block at the end covers
+   system dark mode for the custom (non-Bulma) boxes. */
+[data-theme="dark"] {
   --bulma-primary-h: 171;
-  --bulma-primary-s: 77%;
-  --bulma-primary-l: 64%;
+  --bulma-primary-s: 72%;
+  --bulma-primary-l: 62%;
   --bulma-link-h: 171;
-  --bulma-link-s: 77%;
-  --bulma-link-l: 64%;
-  --bulma-warning-h: 43;
-  --bulma-warning-s: 96%;
-  --bulma-warning-l: 56%;
-  --bulma-scheme-main: #0c0a09;
-  --bulma-scheme-main-bis: #1c1917;
-  --bulma-text: #fafaf9;
-  --bulma-text-strong: #fafaf9;
-  --bulma-text-weak: #a8a29e;
-  --bulma-border: #292524;
-  --bulma-border-weak: #292524;
-  --bulma-card-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-  --bulma-box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --bulma-link-s: 72%;
+  --bulma-link-l: 62%;
+  --bulma-info-h: 210;
+  --bulma-info-s: 35%;
+  --bulma-info-l: 68%;
+  --bulma-success-h: 158;
+  --bulma-success-s: 55%;
+  --bulma-success-l: 58%;
+  --bulma-warning-h: 38;
+  --bulma-warning-s: 95%;
+  --bulma-warning-l: 58%;
+  --bulma-scheme-main: #171412;
+  --bulma-scheme-main-bis: #211d19;
+  --bulma-scheme-main-ter: #2a2521;
+  --bulma-background: #171412;
+  --bulma-text: #f5f2ec;
+  --bulma-text-strong: #fffdf8;
+  --bulma-text-weak: #a89f94;
+  --bulma-border: #332e28;
+  --bulma-border-weak: #2a2521;
+  --bulma-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.4);
+  --bulma-card-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.4);
+  --bulma-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.4);
 }
 
-/* Site layout: narrower than Bulma's default container.
-   Bulma's desktop container rule uses a higher-specificity
-   .container:not(...) selector, so plain max-width loses on PC.
-   Use !important here to keep the old 620px / 760px widths. */
+/* ============ Layout (widths and one-screen homepage, unchanged) ============ */
 .site-container {
   max-width: 620px !important;
   width: 100% !important;
@@ -75,8 +120,10 @@
   max-width: 760px !important;
   width: 100% !important;
 }
-
-/* Homepage: one screen on PC, like before */
+.section {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
 @media (min-width: 768px) {
   .site-section {
     min-height: 100vh;
@@ -93,8 +140,35 @@
   }
 }
 
-/* Card header: old visual, now on Bulma's .card-header.
-   Gradient background, accent bar before title, fading line after title. */
+/* ============ Site title: teal-to-gold gradient text, echoing the
+   card-header accent bar. This is new, not part of the kept header. ============ */
+.site-container > .title {
+  font-size: 30px;
+  letter-spacing: 0.04em;
+  margin-bottom: 1.6rem;
+  background: linear-gradient(90deg, #0f766e, #b45309);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ============ Cards: white, soft border, layered shadow ============ */
+.card {
+  background: #fff;
+  border: 1px solid var(--bulma-border);
+  border-radius: var(--bulma-radius-large);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.card-content {
+  padding: 20px 22px;
+}
+
+/* ============ KEPT: card-header, exactly as before ============
+   Gradient background, accent bar before the title, fading line
+   after the title. Colours are hard-coded here (not via variables)
+   so this look never drifts when the rest of the theme changes. */
 .card-header {
   background: linear-gradient(90deg, rgba(15, 118, 110, 0.09), rgba(15, 118, 110, 0) 72%);
   border-bottom: 1px solid var(--bulma-border);
@@ -108,7 +182,7 @@
   width: 5px;
   height: 20px;
   border-radius: 3px;
-  background: linear-gradient(180deg, var(--bulma-primary), var(--bulma-warning));
+  background: linear-gradient(180deg, #0f766e, #d97706);
   flex: none;
 }
 .card-header-title {
@@ -129,15 +203,74 @@
   margin-left: 4px;
 }
 
-/* Detail / preview boxes: tips and FAQ answers, light grey box like before */
+/* ============ Buttons: lift on hover, clear focus, calm disabled ============ */
+.button {
+  border-radius: var(--bulma-control-radius);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+.button:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+.button:not(:disabled):active {
+  transform: translateY(0);
+}
+.button.is-primary {
+  box-shadow: 0 6px 18px rgba(15, 118, 110, 0.28);
+}
+.button.is-primary:not(:disabled):hover {
+  box-shadow: 0 8px 22px rgba(15, 118, 110, 0.34);
+}
+.button.is-primary:disabled {
+  opacity: 0.55;
+  box-shadow: none;
+}
+.button.is-danger.is-outlined:hover {
+  background: #fef2f2;
+}
+
+/* ============ Forms: white fields, teal focus ring ============ */
+.label {
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  color: var(--bulma-text-strong);
+  margin-bottom: 6px;
+}
+.input,
+.textarea,
+.select select {
+  background: #fff;
+  border-color: #e7e3db;
+  border-radius: var(--bulma-control-radius);
+  box-shadow: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.input:focus,
+.textarea:focus,
+.select select:focus,
+.input:focus-visible,
+.textarea:focus-visible {
+  border-color: var(--bulma-primary);
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.16);
+}
+.textarea {
+  min-height: 96px;
+  line-height: 1.6;
+}
+.select:not(.is-multiple)::after {
+  border-color: var(--bulma-text-weak);
+}
+
+/* ============ Detail / preview boxes: tips and FAQ answers ============ */
 .detail,
 .preview {
   display: none;
   margin-top: 14px;
-  padding: 13px 14px;
-  background: #f5f5f4;
-  border: 1px solid var(--bulma-border);
-  border-radius: 8px;
+  padding: 14px 16px;
+  background: #f8faf8;
+  border: 1px solid #e6e9e4;
+  border-left: 3px solid var(--bulma-primary);
+  border-radius: 10px;
   max-height: 210px;
   overflow-y: auto;
 }
@@ -145,7 +278,6 @@
 .preview.show {
   display: block;
 }
-/* Edit-page preview is always visible once rendered */
 .edit .preview {
   display: block;
   margin-top: 10px;
@@ -154,8 +286,12 @@
 .detail p {
   margin: 8px 0;
 }
+.detail a,
+.preview a {
+  font-weight: 600;
+}
 
-/* FAQ details: keep the + / - marker from before */
+/* ============ FAQ: summary as a soft pill, + / - as a badge ============ */
 details {
   padding: 2px 0;
 }
@@ -163,37 +299,88 @@ summary {
   cursor: pointer;
   font-weight: 650;
   list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  background: #f8f7f4;
+  border: 1px solid var(--bulma-border-weak);
+  border-radius: 10px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+summary:hover {
+  background: #f0fdfa;
 }
 summary::-webkit-details-marker {
   display: none;
 }
 summary::after {
   content: "+";
-  float: right;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
+  text-align: center;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid var(--bulma-border);
   color: var(--bulma-text-weak);
+  font-size: 15px;
+}
+details[open] summary {
+  background: #f0fdfa;
+  color: var(--bulma-primary);
 }
 details[open] summary::after {
   content: "−";
+  color: var(--bulma-primary);
+  border-color: #99f6e4;
 }
+details > div,
 details p {
-  margin: 10px 0 2px;
+  margin: 12px 4px 2px;
   color: var(--bulma-text-weak);
   font-size: 14px;
+  line-height: 1.7;
 }
 
-/* Edit page: section title above the FAQ list, JSON preview, save bar */
+/* ============ Notifications: soft tinted, not flat Bulma colour ============ */
+.notification {
+  border-radius: 12px;
+  border: 1px solid var(--bulma-border);
+  box-shadow: none;
+}
+.notification.is-success {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #065f46;
+}
+.notification.is-danger {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+
+/* ============ Edit page: section title, JSON preview, save bar ============ */
 .edit .section-title {
   font-size: 16px;
-  font-weight: 700;
-  margin: 20px 0 4px;
+  font-weight: 750;
+  margin: 22px 0 6px;
+  color: var(--bulma-text-strong);
 }
 .edit .json-preview {
   white-space: pre-wrap;
   word-break: break-all;
   font-size: 12px;
+  line-height: 1.6;
   max-height: 320px;
   overflow: auto;
   margin: 0;
+  background: #faf9f6;
+  border: 1px solid var(--bulma-border-weak);
+  border-radius: 10px;
+  padding: 12px 14px;
 }
 .edit .preview-label {
   font-size: 13px;
@@ -205,9 +392,10 @@ details p {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(255, 255, 255, 0.97);
   border-top: 1px solid var(--bulma-border);
-  padding: 12px 16px;
+  box-shadow: 0 -8px 24px rgba(33, 29, 25, 0.08);
+  padding: 14px 16px;
   z-index: 20;
 }
 .savebar-inner {
@@ -221,11 +409,7 @@ details p {
   padding-bottom: 150px;
 }
 
-/* Order control: Bulma Form addons, written exactly as Bulma documents it.
-   .field.has-addons joins the controls with a single shared border and
-   square inner corners. Force both controls to stretch to the same height
-   so the bottom borders line up, instead of relying on input/button
-   default heights which can differ by a pixel. */
+/* ============ Order control: Bulma Form addons, as documented ============ */
 .field.has-addons {
   align-items: stretch;
 }
@@ -246,13 +430,51 @@ details p {
   text-align: center;
 }
 
-/* Dark mode: detail / preview / savebar backgrounds */
+/* ============ Footer: quiet, separated ============ */
+.footer {
+  background: transparent;
+  border-top: 1px solid var(--bulma-border-weak);
+  color: var(--bulma-text-weak);
+}
+
+/* ============ Dark mode for custom boxes (system dark, no data-theme) ============ */
 @media (prefers-color-scheme: dark) {
+  .card {
+    background: #211d19;
+  }
   .detail,
   .preview {
-    background: #292524;
+    background: #2a2521;
+    border-color: #332e28;
+  }
+  summary {
+    background: #2a2521;
+    border-color: #332e28;
+  }
+  summary:hover,
+  details[open] summary {
+    background: #134e4a;
+  }
+  .input,
+  .textarea,
+  .select select {
+    background: #211d19;
+    border-color: #332e28;
+  }
+  .edit .json-preview {
+    background: #171412;
   }
   .savebar {
-    background: rgba(28, 25, 23, 0.96);
+    background: rgba(33, 29, 25, 0.97);
+  }
+  .notification.is-success {
+    background: #064e3b;
+    color: #d1fae5;
+    border-color: #065f46;
+  }
+  .notification.is-danger {
+    background: #450a0a;
+    color: #fecaca;
+    border-color: #7f1d1d;
   }
 }
