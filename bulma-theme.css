@@ -431,13 +431,15 @@ summary::after {
   flex: none;
   width: 28px;
   height: 28px;
-  line-height: 28px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
   border-radius: 50%;
   background: #fff;
   border: 1px solid var(--bulma-border);
   color: var(--bulma-text-weak);
-  font-size: 15px;
+  font-size: 18px;
 }
 details[open] summary {
   background: #f0fdfa;
@@ -514,32 +516,26 @@ details p {
 .savebar-inner {
   max-width: 760px;
   margin: 0 auto;
-  display: flex;
-  /* Row by default: token on the left, save button on the right,
-     bar ~64px tall instead of ~110px, covering far less content.
-     Narrow screens stack via the max-width rule below. */
-  flex-direction: row;
-  align-items: center;
-  gap: 10px;
 }
-.savebar-inner .input {
-  flex: 1 1 auto;
+/* Savebar per Bulma Form general, is-grouped + is-expanded:
+   <div class="field is-grouped">
+     <p class="control is-expanded"><input></p>
+     <p class="control"><button></button></p>
+   </div>
+   The token control expands to fill the remaining space, the button
+   stays its natural width, and both are normal size (no is-medium),
+   so input and button share the same 40px height instead of the
+   previous medium button towering over the input. No has-addons
+   join here, so the two controls keep Bulma's grouped gap and the
+   primary button keeps its own shadow / hover. */
+.savebar-inner .field.is-grouped {
+  margin-bottom: 0;
+}
+.savebar-inner .field.is-grouped .control.is-expanded {
   min-width: 0;
 }
-.savebar-inner .button.is-fullwidth {
-  width: auto !important;
-  flex: none;
-  padding-left: 24px;
-  padding-right: 24px;
-}
-@media (max-width: 767px) {
-  .savebar-inner {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .savebar-inner .button.is-fullwidth {
-    width: 100% !important;
-  }
+.savebar-inner .field.is-grouped .control .button {
+  white-space: nowrap;
 }
 .edit-section {
   padding-bottom: 110px;

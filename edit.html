@@ -6,7 +6,7 @@
 <title>编辑</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="stylesheet" href="bulma.min.css">
-<link rel="stylesheet" href="bulma-theme.css?v=20261026-12">
+<link rel="stylesheet" href="bulma-theme.css?v=20261026-13">
 </head>
 <body class="edit">
 <section class="section edit-section">
@@ -49,8 +49,14 @@
 </section>
 
 <div class="savebar"><div class="savebar-inner">
-  <input id="token" class="input" type="password" placeholder="令牌" autocomplete="off">
-  <button id="saveBtn" type="button" class="button is-primary is-fullwidth is-medium">保存并提交到仓库</button>
+  <div class="field is-grouped">
+    <p class="control is-expanded">
+      <input id="token" class="input" type="password" placeholder="令牌" autocomplete="off">
+    </p>
+    <p class="control">
+      <button id="saveBtn" type="button" class="button is-primary">保存并提交到仓库</button>
+    </p>
+  </div>
 </div></div>
 
 <script>
