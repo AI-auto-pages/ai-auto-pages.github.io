@@ -14,13 +14,26 @@
 
 ## 数据来源
 
-页面不再请求另一个仓库的接口，而是直接读取本仓库里的 JSON：
+页面运行时直接读取本仓库里的 JSON，不再请求另一个仓库的接口：
 
 - `data/admin.json`
 
 这是从原维护仓库复制过来的同一份 JSON，结构和字段不变。页面读取后按原逻辑处理每个产品：解析产品链接里的 sku、生成订单号和支付链接，选中项目后显示该项目的提示内容。
 
 以后维护 JSON 时直接改本仓库的 `data/admin.json`，重新发布后刷新页面即可生效。旧的 `data/projects.json` 不再被页面使用。
+
+## 管理页（纯静态，无服务器）
+
+管理页地址是 `https://ai-auto-pages.github.io/admin.html`，不从主页链接过去，只把地址告诉管理员。
+
+它是一个纯静态页面，没有自己的服务器：打开后先用本站的静态文件显示当前 JSON，编辑基本设置和项目列表（新增、删除、上移、下移、下载备份），点底部保存时才需要令牌。
+
+令牌用法：
+
+- 在管理页上方填写 GitHub 令牌，令牌只存在你自己的浏览器里，不写进代码，也不发给除 GitHub 接口之外的任何地方。
+- 推荐用细粒度令牌：GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens → 只选 `AI-auto-pages/ai-auto-pages.github.io` 这个仓库 → Repository permissions → Contents 选 Read and write。经典令牌则选 repo 权限。
+- 保存流程：先用接口拿最新版本和 SHA，比对你加载时的版本，如果仓库里已经变了会先提示你确认，避免覆盖别人刚提交的内容；确认后用 PUT 提交新 JSON，提交成功后等 Pages 重新部署几分钟，主页就会更新。
+- 不填令牌也能查看和编辑表单，但点保存时会提示先填令牌；没有令牌的人打开管理页也提交不了。
 
 ## PC 一屏
 

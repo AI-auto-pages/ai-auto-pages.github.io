@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>管理页 · 妖者发电站</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+:root{--bg:#f6f5f2;--card:#fff;--text:#1c1917;--muted:#78716c;--line:#e9e6e1;--accent:#0f766e;--gold:#d97706;--danger:#dc2626;--shadow:0 8px 24px rgba(28,25,23,.06)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;line-height:1.65}
+a{color:var(--accent);word-break:break-all}
+.wrap{max-width:760px;margin:0 auto;padding:24px 16px 110px}
+h1{font-size:26px;margin:0 0 6px}
+.muted{color:var(--muted);font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);overflow:hidden;margin-top:16px}
+.card-head{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:11px;background:linear-gradient(90deg,rgba(15,118,110,.09),rgba(15,118,110,0) 72%)}
+.card-head::before{content:"";width:5px;height:20px;border-radius:3px;background:linear-gradient(180deg,var(--accent),var(--gold));flex:none}
+.card-head h2{font-size:16px;margin:0}
+.card-body{padding:16px 18px}
+label{display:block;font-size:14px;color:var(--muted);margin:12px 0 6px}
+label:first-child{margin-top:0}
+input[type=text],input[type=password],input[type=number],textarea,select{width:100%;font-size:15px;padding:11px 12px;border:1.5px solid #d6d3d1;border-radius:8px;background:#fff;color:var(--text)}
+input:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(15,118,110,.12)}
+textarea{min-height:90px;resize:vertical}
+.check{ display:flex;align-items:center;gap:8px;margin:10px 0;font-size:15px}
+.check input{width:18px;height:18px;accent-color:var(--accent)}
+button{font-size:15px;font-weight:650;border:0;border-radius:8px;padding:11px 16px;cursor:pointer;background:#1c1917;color:#fff}
+button.secondary{background:#fff;color:var(--text);border:1.5px solid #d6d3d1}
+button.danger{background:#fff;color:var(--danger);border:1.5px solid #fecaca}
+button:disabled{background:#d6d3d1;color:#a8a29e;cursor:not-allowed}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.row button{flex:1;min-width:120px}
+.product{border:1px solid var(--line);border-radius:8px;padding:14px;margin-top:14px}
+.product:first-of-type{margin-top:0}
+.product-head{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.product-head strong{font-size:15px}
+.status{padding:10px 12px;border-radius:8px;background:#f5f5f4;font-size:14px;white-space:pre-wrap;word-break:break-all}
+.status.error{background:#fef2f2;color:#991b1b}
+.status.ok{background:#ecfdf5;color:#065f46}
+.savebar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);border-top:1px solid var(--line);padding:12px 16px;z-index:20}
+.savebar-inner{max-width:760px;margin:0 auto;display:flex;gap:10px}
+.savebar-inner button{flex:1;min-height:48px;font-size:16px}
+.warn{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:11px 13px;font-size:14px}
+@media (max-width:480px){.wrap{padding:18px 12px 110px}.card-body{padding:14px 16px}}
+@media (prefers-color-scheme: dark){:root{--bg:#0c0a09;--card:#1c1917;--text:#fafaf9;--muted:#a8a29e;--line:#292524;--shadow:0 8px 24px rgba(0,0,0,.35)}input[type=text],input[type=password],input[type=number],textarea,select{background:#1c1917;color:#fafaf9;border-color:#44403c}button{background:#fafaf9;color:#1c1917}button.secondary{background:#1c1917;color:#fafaf9;border-color:#44403c}button.danger{background:#1c1917;color:#fca5a5;border-color:#7f1d1d}.status{background:#292524}.savebar{background:rgba(28,25,23,.96)}.warn{background:#422006;border-color:#92400e}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <h1>管理页</h1>
+  <p class="muted">只用来维护本站的 <code>data/admin.json</code>。这个页面本身不含任何令牌，也不向除 GitHub 接口之外的任何地方发送数据。</p>
+
+  <section class="card">
+    <div class="card-head"><h2>连接与令牌</h2></div>
+    <div class="card-body">
+      <div class="warn">令牌只存在你自己的浏览器里，保存时才随请求发给 api.github.com。不要把令牌写进代码、截图或发给别人。没有令牌的人打开这个页面也提交不了。</div>
+      <label for="owner">仓库所有者</label>
+      <input id="owner" type="text" value="AI-auto-pages" autocomplete="off">
+      <label for="repo">仓库名</label>
+      <input id="repo" type="text" value="ai-auto-pages.github.io" autocomplete="off">
+      <label for="branch">分支</label>
+      <input id="branch" type="text" value="main" autocomplete="off">
+      <label for="jsonPath">JSON 文件路径</label>
+      <input id="jsonPath" type="text" value="data/admin.json" autocomplete="off">
+      <label for="token">GitHub 令牌（细粒度令牌，只选这个仓库，Contents 读写权限；经典令牌则选 repo 权限）</label>
+      <input id="token" type="password" placeholder="粘贴令牌，保存后可选择是否留在本浏览器" autocomplete="off">
+      <div class="row" style="margin-top:12px">
+        <button id="loadBtn" type="button" class="secondary">重新加载</button>
+        <button id="clearTokenBtn" type="button" class="secondary">清除本机令牌</button>
+      </div>
+      <label class="check"><input id="rememberToken" type="checkbox"> 在本浏览器记住令牌（不勾选则只保存在本次打开的页面里，关掉页面就失效）</label>
+      <p class="muted">创建令牌：GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens → 只选上面这个仓库 → Repository permissions → Contents 选 Read and write。</p>
+      <div id="status" class="status">正在加载当前 JSON……</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><h2>基本设置</h2></div>
+    <div class="card-body" id="basicForm">
+      <label for="fTitle">页面标题</label>
+      <input id="fTitle" type="text">
+      <label for="fApiUrl">api_url（支付接口地址，来自 JSON，改动前请确认）</label>
+      <input id="fApiUrl" type="text" autocomplete="off">
+      <label for="fAnnouncement">公告（仅在下方勾选启用时显示）</label>
+      <textarea id="fAnnouncement"></textarea>
+      <label class="check"><input id="fAnnouncementEnabled" type="checkbox"> 启用公告</label>
+      <label class="check"><input id="fQaOrder" type="checkbox"> qa_order</label>
+      <label class="check"><input id="fEasyPay" type="checkbox"> easy_pay</label>
+      <label class="check"><input id="fAfdRedir" type="checkbox"> afd_redir</label>
+      <label for="fTips">通用 tips（每行一条，对应 JSON 里的 tips 数组）</label>
+      <textarea id="fTips"></textarea>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><h2>项目列表</h2></div>
+    <div class="card-body">
+      <div id="productList"></div>
+      <div class="row" style="margin-top:14px">
+        <button id="addBtn" type="button" class="secondary">新增项目</button>
+        <button id="downloadBtn" type="button" class="secondary">下载当前 JSON 备份</button>
+      </div>
+      <p class="muted">提示区（tips）支持 HTML，例如放下载链接。改动不会立即在主页面上生效，提交后等 Pages 重新部署几分钟，刷新主页即可看到。</p>
+      <details>
+        <summary style="cursor:pointer;font-weight:650">查看当前 JSON（只读预览）</summary>
+        <pre id="jsonPreview" style="white-space:pre-wrap;word-break:break-all;font-size:12px;max-height:320px;overflow:auto"></pre>
+      </details>
+    </div>
+  </section>
+</main>
+
+<div class="savebar"><div class="savebar-inner">
+  <button id="saveBtn" type="button">保存并提交到仓库</button>
+</div></div>
+
+<script>
+const $ = id => document.getElementById(id);
+let data = null;
+let originalJsonText = '';
+let currentSha = '';
+
+function setStatus(msg, kind){
+  const el = $('status');
+  el.textContent = msg;
+  el.className = 'status' + (kind ? ' ' + kind : '');
+}
+function decodeB64(b64){
+  const bin = atob(String(b64).replace(/\s/g,''));
+  const bytes = new Uint8Array(bin.length);
+  for (let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+  return new TextDecoder('utf-8').decode(bytes);
+}
+function encodeB64(str){
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  const chunk = 0x8000;
+  for (let i=0;i<bytes.length;i+=chunk) bin += String.fromCharCode.apply(null, bytes.subarray(i, i+chunk));
+  return btoa(bin);
+}
+function apiUrl(){
+  const owner = $('owner').value.trim(), repo = $('repo').value.trim(), path = $('jsonPath').value.trim();
+  return 'https://api.github.com/repos/' + encodeURIComponent(owner) + '/' + encodeURIComponent(repo) + '/contents/' + path.split('/').map(encodeURIComponent).join('/');
+}
+function getToken(){
+  return $('token').value.trim() || localStorage.getItem('admin_github_token') || sessionStorage.getItem('admin_github_token') || '';
+}
+function collectFromForm(){
+  const products = [];
+  document.querySelectorAll('.product').forEach(el => {
+    const get = cls => el.querySelector('.' + cls).value;
+    products.push({
+      name: get('pName'),
+      url: get('pUrl'),
+      price: get('pPrice') === '' ? 1 : Number(get('pPrice')),
+      gcode: get('pGcode'),
+      tips: get('pTips'),
+      plan_id: get('pPlanId'),
+      cipher_key: get('pCipherKey'),
+    });
+  });
+  return {
+    title: $('fTitle').value,
+    qa_order: $('fQaOrder').checked,
+    easy_pay: $('fEasyPay').checked,
+    afd_redir: $('fAfdRedir').checked,
+    announcement_enabled: $('fAnnouncementEnabled').checked,
+    products: products,
+    tips: $('fTips').value.split('\n').map(s=>s.trim()).filter(Boolean),
+    announcement: $('fAnnouncement').value,
+    api_url: $('fApiUrl').value.trim(),
+  };
+}
+function renderForm(){
+  if (!data) return;
+  $('fTitle').value = data.title || '';
+  $('fApiUrl').value = data.api_url || '';
+  $('fAnnouncement').value = data.announcement || '';
+  $('fAnnouncementEnabled').checked = !!data.announcement_enabled;
+  $('fQaOrder').checked = !!data.qa_order;
+  $('fEasyPay').checked = !!data.easy_pay;
+  $('fAfdRedir').checked = !!data.afd_redir;
+  $('fTips').value = (data.tips || []).join('\n');
+  const list = $('productList');
+  list.innerHTML = '';
+  (data.products || []).forEach((p, idx) => {
+    const div = document.createElement('div');
+    div.className = 'product';
+    div.innerHTML =
+      '<div class="product-head"><strong>项目 ' + (idx+1) + '</strong><span class="row" style="flex:0 0 auto"><button type="button" class="secondary upBtn">上移</button><button type="button" class="secondary downBtn">下移</button><button type="button" class="danger delBtn">删除</button></span></div>' +
+      '<label>名称</label><input class="pName" type="text">' +
+      '<label>链接（url）</label><input class="pUrl" type="text" autocomplete="off">' +
+      '<label>价格（price）</label><input class="pPrice" type="number" step="any">' +
+      '<label>gcode</label><input class="pGcode" type="text" autocomplete="off">' +
+      '<label>plan_id</label><input class="pPlanId" type="text" autocomplete="off">' +
+      '<label>cipher_key</label><input class="pCipherKey" type="password" autocomplete="off">' +
+      '<label>提示区（tips，支持 HTML）</label><textarea class="pTips"></textarea>';
+    div.querySelector('.pName').value = p.name || '';
+    div.querySelector('.pUrl').value = p.url || '';
+    div.querySelector('.pPrice').value = (p.price ?? '');
+    div.querySelector('.pGcode').value = p.gcode || '';
+    div.querySelector('.pPlanId').value = p.plan_id || '';
+    div.querySelector('.pCipherKey').value = p.cipher_key || '';
+    div.querySelector('.pTips').value = p.tips || '';
+    div.querySelector('.delBtn').addEventListener('click', () => { if (confirm('确定删除这个项目吗？')) { div.remove(); refreshPreview(); } });
+    div.querySelector('.upBtn').addEventListener('click', () => { const prev = div.previousElementSibling; if (prev) { list.insertBefore(div, prev); refreshPreview(); } });
+    div.querySelector('.downBtn').addEventListener('click', () => { const next = div.nextElementSibling; if (next) { list.insertBefore(next, div); refreshPreview(); } });
+    list.appendChild(div);
+  });
+  refreshPreview();
+}
+function refreshPreview(){
+  try { $('jsonPreview').textContent = JSON.stringify(collectFromForm(), null, 2); } catch(e) {}
+}
+document.addEventListener('input', e => { if (e.target.closest('.product') || e.target.closest('#basicForm')) refreshPreview(); });
+async function loadFromPages(){
+  // 先用本站的静态文件直接显示，不用令牌也能看当前内容；保存时再用接口拿最新 SHA
+  const res = await fetch('data/admin.json?' + Date.now());
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  data = await res.json();
+  originalJsonText = JSON.stringify(data, null, 2);
+  renderForm();
+  setStatus('已加载当前 JSON（来自本站静态文件）。编辑后点底部保存，需要令牌才会提交。', 'ok');
+}
+async function loadFromApi(){
+  const token = getToken();
+  if (!token) { await loadFromPages(); return; }
+  const res = await fetch(apiUrl() + '?ref=' + encodeURIComponent($('branch').value.trim() || 'main'), { headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' } });
+  if (!res.ok) throw new Error('接口返回 HTTP ' + res.status + '，请检查令牌权限和仓库信息。');
+  const json = await res.json();
+  currentSha = json.sha || '';
+  data = JSON.parse(decodeB64(json.content));
+  originalJsonText = JSON.stringify(data, null, 2);
+  renderForm();
+  setStatus('已通过接口加载最新 JSON，SHA 已记录。', 'ok');
+}
+$('loadBtn').addEventListener('click', async () => {
+  setStatus('正在加载……');
+  try { await loadFromApi(); } catch(e) { setStatus('加载失败：' + e.message, 'error'); }
+});
+$('clearTokenBtn').addEventListener('click', () => {
+  localStorage.removeItem('admin_github_token'); sessionStorage.removeItem('admin_github_token'); $('token').value = '';
+  setStatus('已清除本机保存的令牌。', 'ok');
+});
+$('addBtn').addEventListener('click', () => {
+  if (!data) data = { products: [] };
+  if (!data.products) data.products = [];
+  data.products.push({ name: '', url: '', price: 1, gcode: '', tips: '', plan_id: '', cipher_key: '' });
+  renderForm();
+});
+$('downloadBtn').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(collectFromForm(), null, 2)], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'admin.json'; a.click(); URL.revokeObjectURL(a.href);
+});
+$('saveBtn').addEventListener('click', async () => {
+  const token = getToken();
+  if (!token) { setStatus('请先在上方填写 GitHub 令牌，再点保存。', 'error'); $('token').focus(); return; }
+  const remember = $('rememberToken').checked;
+  if (remember) { localStorage.setItem('admin_github_token', token); sessionStorage.removeItem('admin_github_token'); }
+  else { sessionStorage.setItem('admin_github_token', token); }
+  const newData = collectFromForm();
+  if (!newData.products.length) { if (!confirm('项目列表为空，确定要提交一个空列表吗？')) return; }
+  for (let i=0;i<newData.products.length;i++){ if (!newData.products[i].name) { setStatus('第 ' + (i+1) + ' 个项目没有填写名称，请先填写。', 'error'); return; } }
+  $('saveBtn').disabled = true;
+  setStatus('正在提交……先拿最新版本比对，避免覆盖别人刚提交的内容。');
+  try {
+    // 保存前一定先拿接口最新版
+    const getRes = await fetch(apiUrl() + '?ref=' + encodeURIComponent($('branch').value.trim() || 'main'), { headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' } });
+    if (!getRes.ok) throw new Error('拿最新版本失败，HTTP ' + getRes.status + '。请检查令牌权限。');
+    const latest = await getRes.json();
+    const latestText = JSON.stringify(JSON.parse(decodeB64(latest.content)), null, 2);
+    if (latestText !== originalJsonText) {
+      if (!confirm('仓库里的最新版本和你加载时不一样，可能是有人刚提交过，或者页面部署还没更新。点确定表示用你现在编辑的内容覆盖最新版，点取消则先重新加载最新版再编辑。')) {
+        currentSha = latest.sha; data = JSON.parse(decodeB64(latest.content)); originalJsonText = latestText; renderForm(); setStatus('已取消提交，并重新加载了最新版本，请检查后再保存。', 'error'); $('saveBtn').disabled = false; return;
+      }
+    }
+    const body = {
+      message: 'Update data/admin.json via admin page',
+      content: encodeB64(JSON.stringify(newData, null, 2)),
+      sha: latest.sha,
+      branch: $('branch').value.trim() || 'main',
+    };
+    const putRes = await fetch(apiUrl(), { method: 'PUT', headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const putJson = await putRes.json();
+    if (!putRes.ok) throw new Error('提交失败，HTTP ' + putRes.status + '：' + (putJson.message || '未知错误'));
+    originalJsonText = JSON.stringify(newData, null, 2);
+    data = newData; currentSha = putJson.content ? putJson.content.sha : '';
+    setStatus('提交成功！提交链接：' + (putJson.commit && putJson.commit.html_url ? putJson.commit.html_url : '请在仓库提交记录里查看') + '。等 Pages 重新部署几分钟后，主页就会更新。', 'ok');
+  } catch(e) {
+    setStatus('提交失败：' + e.message, 'error');
+  } finally { $('saveBtn').disabled = false; }
+});
+// 启动：先恢复本机令牌（如果之前勾选过记住），再加载本站静态 JSON 显示
+(function init(){
+  const saved = localStorage.getItem('admin_github_token');
+  if (saved) { $('token').value = saved; $('rememberToken').checked = true; }
+  loadFromPages().catch(e => setStatus('加载失败：' + e.message + '。请检查网络后点重新加载。', 'error'));
+})();
+</script>
+</body>
+</html>
