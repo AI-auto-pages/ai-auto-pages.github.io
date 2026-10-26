@@ -236,7 +236,13 @@
   transform: translateY(0);
 }
 .button.is-primary {
+  color: #fff !important;
   box-shadow: 0 6px 18px rgba(15, 118, 110, 0.28);
+}
+.button.is-primary:hover,
+.button.is-primary:active,
+.button.is-primary:focus {
+  color: #fff !important;
 }
 .button.is-primary:not(:disabled):hover {
   background-color: #0b5f58;
@@ -509,24 +515,30 @@ details p {
   max-width: 760px;
   margin: 0 auto;
   display: flex;
-  flex-direction: column;
+  /* Row by default: token on the left, save button on the right,
+     bar ~64px tall instead of ~110px, covering far less content.
+     Narrow screens stack via the max-width rule below. */
+  flex-direction: row;
+  align-items: center;
   gap: 10px;
 }
-@media (min-width: 768px) {
-  /* Desktop: token and save button on one row, so the bar is
-     ~64px tall instead of ~110px and covers far less content. */
+.savebar-inner .input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.savebar-inner .button.is-fullwidth {
+  width: auto !important;
+  flex: none;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+@media (max-width: 767px) {
   .savebar-inner {
-    flex-direction: row;
-    align-items: center;
-  }
-  .savebar-inner .input {
-    flex: 1;
+    flex-direction: column;
+    align-items: stretch;
   }
   .savebar-inner .button.is-fullwidth {
-    width: auto;
-    flex: none;
-    padding-left: 24px;
-    padding-right: 24px;
+    width: 100% !important;
   }
 }
 .edit-section {
