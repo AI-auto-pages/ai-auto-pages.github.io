@@ -4,149 +4,116 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>妖者发电站</title>
-<meta name="description" content="妖者发电站：选择项目，支持作者。">
 <style>
 :root{
-  --bg:#f7f5f0; --card:#ffffff; --text:#1c1917; --muted:#78716c; --line:#e7e5e4;
-  --accent:#0f766e; --accent-soft:#ccfbf1; --gold:#f59e0b; --gold-soft:#fef3c7;
-  --shadow:0 10px 30px rgba(28,25,23,.07); --radius:20px;
+  --bg:#f6f5f2; --card:#fff; --text:#1c1917; --muted:#78716c; --line:#e9e6e1;
+  --accent:#0f766e; --shadow:0 8px 24px rgba(28,25,23,.06);
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;line-height:1.7}
-a{color:var(--accent)}
-.wrap{max-width:620px;margin:0 auto;padding:24px 16px calc(32px + env(safe-area-inset-bottom))}
-/* Hero */
-.hero{padding:28px 4px 18px}
-.badge{display:inline-block;font-size:12px;letter-spacing:.12em;color:var(--accent);background:var(--accent-soft);padding:5px 11px;border-radius:999px;font-weight:700}
-.hero h1{font-family:Georgia,"Songti SC","Noto Serif SC",serif;font-size:34px;line-height:1.25;margin:14px 0 8px;letter-spacing:.01em}
-.hero p{color:var(--muted);margin:0;font-size:15px}
-.hero .rule{width:44px;height:3px;background:var(--gold);border-radius:99px;margin-top:16px}
-/* Cards */
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-top:16px}
-.card h2{font-size:17px;margin:0 0 12px;display:flex;align-items:center;gap:8px}
-.card h2::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--gold);flex:none}
-.card p{margin:10px 0}
-.muted{color:var(--muted);font-size:14px}
-.mono{word-break:break-all;font-size:14px}
-/* Notice */
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;line-height:1.6}
+a{color:var(--accent);word-break:break-all}
+.wrap{max-width:620px;margin:0 auto;padding:18px 16px 16px}
+h1{font-family:Georgia,"Songti SC","Noto Serif SC",serif;font-size:29px;line-height:1.3;margin:0 0 14px;text-align:center;letter-spacing:.01em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;margin-top:12px}
+.card:first-of-type{margin-top:0}
+.card-head{padding:13px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.card-head::before{content:"";width:4px;height:18px;border-radius:99px;background:var(--accent);flex:none}
+.card-head h2{font-size:16px;margin:0;line-height:1.4}
+.card-body{padding:14px 18px}
+.card-body p{margin:8px 0}
+.card-body p:first-child{margin-top:0}
+.card-body p:last-child{margin-bottom:0}
 .notice-list{margin:0;padding-left:18px}
-.notice-list li{margin:6px 0}
-.announcement{display:none;background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:12px 14px;margin-top:12px}
-.announcement.show{display:block}
-/* Form */
-label{display:block;font-size:14px;color:var(--muted);margin-bottom:8px}
+.notice-list li{margin:5px 0}
 .select-wrap{position:relative}
-select{width:100%;appearance:none;-webkit-appearance:none;font-size:17px;line-height:1.4;padding:15px 44px 15px 16px;border:1.5px solid #d6d3d1;border-radius:14px;background:#fff;color:var(--text);cursor:pointer;transition:border-color .15s, box-shadow .15s}
+select{width:100%;appearance:none;-webkit-appearance:none;font-size:16px;padding:13px 42px 13px 14px;border:1.5px solid #d6d3d1;border-radius:12px;background:#fff;color:var(--text);cursor:pointer}
 select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(15,118,110,.12)}
-.select-wrap::after{content:"";position:absolute;right:18px;top:50%;width:9px;height:9px;border-right:2px solid #78716c;border-bottom:2px solid #78716c;transform:translateY(-70%) rotate(45deg);pointer-events:none}
-button{width:100%;min-height:52px;font-size:17px;font-weight:700;border:0;border-radius:14px;background:#1c1917;color:#fff;cursor:pointer;margin-top:14px;transition:transform .12s, box-shadow .15s, background .15s}
-button:not(:disabled):hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(28,25,23,.18)}
-button:not(:disabled):active{transform:translateY(0) scale(.99)}
+.select-wrap::after{content:"";position:absolute;right:16px;top:50%;width:8px;height:8px;border-right:2px solid #78716c;border-bottom:2px solid #78716c;transform:translateY(-70%) rotate(45deg);pointer-events:none}
+button{width:100%;min-height:48px;font-size:16px;font-weight:700;border:0;border-radius:12px;background:#1c1917;color:#fff;cursor:pointer;margin-top:12px;transition:transform .12s, box-shadow .15s}
+button:not(:disabled):hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(28,25,23,.16)}
+button:not(:disabled):active{transform:scale(.99)}
 button:disabled{background:#d6d3d1;color:#a8a29e;cursor:not-allowed}
-button.ghost{background:#fff;color:var(--text);border:1.5px solid #d6d3d1;font-weight:600}
-.detail{display:none;margin-top:14px;padding:14px 16px;background:#f5f5f4;border:1px solid var(--line);border-radius:14px;animation:fadeUp .25s ease}
+.detail{display:none;margin-top:12px;padding:12px 14px;background:#f5f5f4;border:1px solid var(--line);border-radius:12px;max-height:190px;overflow-y:auto}
 .detail.show{display:block}
-@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.price{display:inline-block;background:var(--gold-soft);color:#92400e;font-weight:700;font-size:13px;padding:3px 10px;border-radius:999px}
-.detail a{word-break:break-all}
-.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:#1c1917;color:#fff;padding:11px 18px;border-radius:999px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:50;max-width:calc(100vw - 32px);text-align:center}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-/* FAQ */
-details{border-top:1px solid var(--line);padding:13px 2px}
-details:first-of-type{border-top:0}
+.detail p{margin:8px 0}
+details{padding:2px 0}
 summary{cursor:pointer;font-weight:650;list-style:none}
 summary::-webkit-details-marker{display:none}
 summary::after{content:"+";float:right;color:var(--muted)}
-details[open ] summary::after{content:"−"}
-/* Progress */
-.progress-row{margin:12px 0}
-.progress-top{display:flex;justify-content:space-between;gap:12px;font-size:14px}
-.bar{height:8px;background:#e7e5e4;border-radius:99px;overflow:hidden;margin-top:6px}
-.bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:99px;transition:width .6s ease}
-.skeleton{height:52px;border-radius:14px;background:linear-gradient(90deg,#eee,#f7f7f7,#eee);background-size:200% 100%;animation:shimmer 1.2s infinite}
-@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
-footer{text-align:center;color:var(--muted);font-size:13px;padding:10px 16px 24px}
+details[open] summary::after{content:"−"}
+details p{margin:10px 0 2px;color:var(--muted);font-size:14px}
+footer{text-align:center;color:var(--muted);font-size:12px;line-height:1.6;padding:12px 16px 8px}
+@media (min-width:768px){
+  .wrap{padding:20px 16px 10px}
+  h1{font-size:28px;margin-bottom:12px}
+  .card{margin-top:11px}
+  .card-head{padding:11px 18px}
+  .card-body{padding:12px 18px}
+  select{padding:12px 42px 12px 14px}
+  button{min-height:46px;margin-top:11px}
+  .detail{max-height:170px}
+  footer{padding:10px 16px 6px}
+}
 @media (max-width:480px){
-  .wrap{padding:18px 12px calc(28px + env(safe-area-inset-bottom))}
-  .hero{padding:20px 4px 14px}
-  .hero h1{font-size:29px}
-  .card{padding:17px;border-radius:18px}
-  select{font-size:17px}
+  .wrap{padding:16px 12px}
+  h1{font-size:26px}
+  .card{border-radius:16px}
+  .card-head,.card-body{padding-left:16px;padding-right:16px}
 }
 @media (prefers-color-scheme: dark){
-  :root{--bg:#0c0a09;--card:#1c1917;--text:#fafaf9;--muted:#a8a29e;--line:#292524;--accent:#5eead4;--accent-soft:#134e4a;--gold-soft:#422006;--shadow:0 10px 30px rgba(0,0,0,.35)}
+  :root{--bg:#0c0a09;--card:#1c1917;--text:#fafaf9;--muted:#a8a29e;--line:#292524;--accent:#5eead4;--shadow:0 8px 24px rgba(0,0,0,.35)}
   select{background:#1c1917;color:#fafaf9;border-color:#44403c}
   button{background:#fafaf9;color:#1c1917}
   button:disabled{background:#44403c;color:#a8a29e}
-  button.ghost{background:#1c1917;color:#fafaf9;border-color:#44403c}
   .detail{background:#292524}
 }
 </style>
 </head>
 <body>
 <main class="wrap">
-  <header class="hero">
-    <span class="badge">支持 · 发电站</span>
-    <h1 id="siteTitle">妖者发电站</h1>
-    <p>收藏本页，方便下次回来。支持原创，感谢每一份支持。</p>
-    <div class="rule"></div>
-  </header>
+  <h1 id="siteTitle">妖者发电站</h1>
 
   <section class="card">
-    <h2>说明</h2>
-    <ul class="notice-list">
-      <li><strong>防失联，请认准此页面，建议收藏</strong></li>
-      <li>永久地址：<a id="permanentLink" href="https://ai-auto-pages.github.io/">https://ai-auto-pages.github.io/</a> <button type="button" class="ghost" id="copyBtn" style="width:auto;min-height:0;padding:6px 12px;font-size:13px;margin:0 0 0 6px">复制地址</button></li>
-      <li>原创不易，请大家支持作者！乐意的话，可以多支持几份。</li>
-    </ul>
-    <div id="announcement" class="announcement"></div>
-    <p id="dataSourceNote" class="muted">项目数据正在从维护仓库实时加载……</p>
-  </section>
-
-  <section class="card">
-    <h2>选择项目</h2>
-    <label for="projectSelect">选择项目</label>
-    <div class="select-wrap">
-      <select id="projectSelect"><option>数据加载中……</option></select>
+    <div class="card-head"><h2>说明</h2></div>
+    <div class="card-body">
+      <ul class="notice-list">
+        <li><strong>防失联，请认准此页面，建议收藏</strong></li>
+        <li>永久地址：<a href="https://ai-auto-pages.github.io/">https://ai-auto-pages.github.io/</a></li>
+        <li>原创不易，请大家支持作者！乐意的话，可以多支持几份。</li>
+      </ul>
     </div>
-    <div id="detail" class="detail"></div>
-    <button id="actionBtn" disabled>请先选择</button>
-    <p class="muted" id="hint">先选一个项目，按钮才会变成可点状态。</p>
-  </section>
-
-  <section class="card" id="progressCard" style="display:none">
-    <h2>支持进度</h2>
-    <div id="progressList"></div>
   </section>
 
   <section class="card">
-    <h2>常见问题</h2>
-    <div id="faq"></div>
+    <div class="card-head"><h2>选择项目</h2></div>
+    <div class="card-body">
+      <div class="select-wrap">
+        <select id="projectSelect"><option>数据加载中……</option></select>
+      </div>
+      <div id="detail" class="detail"></div>
+      <button id="actionBtn" disabled>请先选择</button>
+    </div>
   </section>
 
-  <p class="muted" style="text-align:center">原创不易，喜欢请支持。</p>
+  <section class="card">
+    <div class="card-head"><h2>常见问题</h2></div>
+    <div class="card-body">
+      <details>
+        <summary>蓝奏云打不开？</summary>
+        <p>把链接里的蓝奏云域名换成你能访问的域名再打开，也可以通过搜索找到当前可用的蓝奏云域名。</p>
+      </details>
+    </div>
+  </section>
 </main>
 <footer>本页面由粉丝支持赞助，与其他任何平台以及平台用户无关。</footer>
-<div id="toast" class="toast"></div>
 
 <script>
 const select = document.getElementById('projectSelect');
 const detail = document.getElementById('detail');
 const btn = document.getElementById('actionBtn');
-const hint = document.getElementById('hint');
-const toastEl = document.getElementById('toast');
 let products = [];
-let apiUrl = '';
-let fallbackUsed = false;
 
-function toast(msg){
-  toastEl.textContent = msg;
-  toastEl.classList.add('show');
-  clearTimeout(toastEl._t);
-  toastEl._t = setTimeout(() => toastEl.classList.remove('show'), 2600);
-}
-// 与 Angular 代码一致的 Base64 + UTF-8 解码：atob -> Uint8Array -> TextDecoder
 function decodeGithubContent(b64){
   const binary = atob(String(b64).replace(/\s/g, ''));
   const bytes = new Uint8Array(binary.length);
@@ -154,7 +121,6 @@ function decodeGithubContent(b64){
   return new TextDecoder('utf-8').decode(bytes);
 }
 async function fetchGithubJson(repoPath){
-  // 与 Angular 逻辑对应：先走相对代理路径，失败再走直连 api.github.com，并加时间戳防缓存
   const dataUrl = 'repos/blog-auto/json/contents/' + repoPath + '?ref=main&' + Date.now();
   const urls = ['/api.github.com/' + dataUrl, 'https://api.github.com/' + dataUrl];
   let lastErr = null;
@@ -169,7 +135,6 @@ async function fetchGithubJson(repoPath){
   }
   throw lastErr || new Error('fetch failed');
 }
-// 与 Angular 逻辑对应：解析产品 URL 里的 sku，生成 custom_order_id 和 pay_url
 function transformProduct(p, apiUrlValue){
   try {
     if (!p.url) return p;
@@ -190,69 +155,26 @@ function transformProduct(p, apiUrlValue){
     if (apiUrlValue) {
       p.pay_url = apiUrlValue + '/pay-in1?i=' + p.plan_id + '&sk=' + p.sku_id + '&pr=' + p.price + '&co=' + timestamp + randomNum + '&g=' + p.gcode + '&k=' + p.cipher_key;
     }
-  } catch (e) { /* 单个产品解析失败不影响其他产品 */ }
+  } catch (e) {}
   return p;
-}
-function renderProducts(data){
-  if (data.title) { document.getElementById('siteTitle').textContent = data.title; document.title = data.title; }
-  if (data.announcement_enabled && data.announcement) {
-    const a = document.getElementById('announcement');
-    a.textContent = data.announcement; a.classList.add('show');
-  }
-  apiUrl = data.api_url || '';
-  products = (data.products || []).map(p => transformProduct(Object.assign({}, p), apiUrl));
-  select.innerHTML = '<option value="">请选择</option>' + products.map((p, i) => '<option value="' + i + '">' + p.name + '</option>').join('');
-  document.getElementById('dataSourceNote').textContent = fallbackUsed
-    ? '实时数据加载失败，当前显示的是本地备用数据，请刷新重试。'
-    : '项目数据来自维护仓库的 users/admin.json，维护方更新 JSON 后刷新本页即可看到新数据。';
-  // FAQ：优先用新数据里的 tips/announcement 逻辑对应的固定问题；没有则保留通用问题
-  const faqEl = document.getElementById('faq');
-  faqEl.innerHTML = '<details><summary>蓝奏云打不开？</summary><p>把链接里的蓝奏云域名换成你能访问的域名再打开，也可以通过搜索找到当前可用的蓝奏云域名。</p></details>';
 }
 async function load(){
   try {
     const data = await fetchGithubJson('users/admin.json');
-    renderProducts(data);
+    if (data.title) { document.getElementById('siteTitle').textContent = data.title; document.title = data.title; }
+    products = (data.products || []).map(p => transformProduct(Object.assign({}, p), data.api_url || ''));
+    select.innerHTML = '<option value="">请选择</option>' + products.map((p, i) => '<option value="' + i + '">' + p.name + '</option>').join('');
   } catch (e) {
-    // 备用：本地 data/projects.json（与之前版本同结构），并明确提示是备用数据
-    try {
-      fallbackUsed = true;
-      const res = await fetch('data/projects.json');
-      const local = await res.json();
-      // 本地备用格式转成与远程一致的 projects 结构
-      const adapted = { title: '妖者发电站', products: (local.projects || []).map(p => ({ name: p.name, url: p.supportUrl || '', price: 1, gcode: '', plan_id: '', cipher_key: '', tips: '' })) };
-      renderProducts(adapted);
-    } catch (e2) {
-      select.innerHTML = '<option value="">数据加载失败，请刷新重试</option>';
-      document.getElementById('dataSourceNote').textContent = '实时数据加载失败，请检查网络后刷新重试。';
-    }
+    select.innerHTML = '<option value="">数据加载失败，请刷新重试</option>';
   }
-  // endorsements：与 Angular 第二个请求对应，progresses 为空时隐藏该卡片
-  try {
-    const endorse = await fetchGithubJson('pub/endorsements.json');
-    const list = endorse.progresses || [];
-    if (list.length) {
-      const card = document.getElementById('progressCard');
-      card.style.display = 'block';
-      document.getElementById('progressList').innerHTML = list.map(item => {
-        const name = item.name || item.title || item.label || '';
-        const pct = item.percent ?? item.progress ?? item.rate ?? null;
-        const text = item.text || item.amount || item.value || '';
-        return '<div class="progress-row"><div class="progress-top"><span>' + name + '</span><span>' + text + '</span></div>' + (pct !== null ? '<div class="bar"><i style="width:' + Math.min(100, Math.max(0, Number(pct))) + '%"></i></div>' : '') + '</div>';
-      }).join('');
-    }
-  } catch (e) { /* endorsements 加载失败不阻塞主流程 */ }
 }
 select.addEventListener('change', () => {
   const idx = select.value === '' ? -1 : Number(select.value);
   const p = idx >= 0 ? products[idx] : null;
-  if (!p) { detail.classList.remove('show'); btn.disabled = true; btn.textContent = '请先选择'; hint.textContent = '先选一个项目，按钮才会变成可点状态。'; return; }
+  if (!p) { detail.classList.remove('show'); btn.disabled = true; btn.textContent = '请先选择'; return; }
   detail.classList.add('show');
-  let html = '<div><strong>' + p.name + '</strong></div>';
-  if (p.price !== undefined && p.price !== null && p.price !== '') html += '<p><span class="price">价格：' + p.price + '</span></p>';
-  if (p.tips) html += '<div>' + p.tips + '</div>';
-  detail.innerHTML = html;
-  btn.disabled = false; btn.textContent = '去发电'; hint.textContent = '已选好项目，点上面按钮继续。';
+  detail.innerHTML = '<strong>' + p.name + '</strong>' + (p.tips ? '<div>' + p.tips + '</div>' : '');
+  btn.disabled = false; btn.textContent = '去发电';
 });
 btn.addEventListener('click', () => {
   const idx = select.value === '' ? -1 : Number(select.value);
@@ -260,15 +182,6 @@ btn.addEventListener('click', () => {
   if (!p) return;
   const target = p.pay_url || p.url;
   if (target) window.open(target, '_blank');
-  else toast('这个项目还没有可用的支持链接');
-});
-document.getElementById('copyBtn').addEventListener('click', async () => {
-  const url = 'https://ai-auto-pages.github.io/';
-  try { await navigator.clipboard.writeText(url); toast('已复制永久地址'); }
-  catch (e) {
-    const ta = document.createElement('textarea'); ta.value = url; document.body.appendChild(ta); ta.select();
-    try { document.execCommand('copy'); toast('已复制永久地址'); } catch (err) { toast(url); } finally { document.body.removeChild(ta); }
-  }
 });
 load();
 </script>
