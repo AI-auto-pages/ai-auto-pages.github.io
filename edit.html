@@ -22,19 +22,19 @@
 <title>编辑</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="stylesheet" href="bulma.min.css">
-<link rel="stylesheet" href="bulma-theme.css?v=20261026-20">
+<link rel="stylesheet" href="bulma-theme.css?v=20261026-21">
 </head>
 <body class="edit">
+<section class="section edit-section">
+<div class="edit-container">
 <div class="theme-switch">
   <button type="button" class="theme-switch-toggle" aria-haspopup="true" aria-expanded="false" aria-label="切换主题" title="切换主题"><span class="theme-switch-icon">🌓</span><span class="theme-switch-caret">▾</span></button>
   <div class="theme-switch-menu" role="menu" aria-label="主题">
-    <button type="button" role="menuitem" data-theme-choice="light"><span>☀</span><span>浅色</span><span class="theme-check">✓</span></button>
-    <button type="button" role="menuitem" data-theme-choice="dark"><span>🌙</span><span>深色</span><span class="theme-check">✓</span></button>
-    <button type="button" role="menuitem" data-theme-choice="system"><span>🌓</span><span>跟随系统</span><span class="theme-check">✓</span></button>
+    <button type="button" role="menuitem" data-theme-choice="light" title="浅色" aria-label="浅色主题">☀</button>
+    <button type="button" role="menuitem" data-theme-choice="dark" title="深色" aria-label="深色主题">🌙</button>
+    <button type="button" role="menuitem" data-theme-choice="system" title="跟随系统" aria-label="跟随系统主题">🌓</button>
   </div>
 </div>
-<section class="section edit-section">
-<div class="edit-container">
   <div class="card mb-4">
     <header class="card-header"><p class="card-header-title">基本设置</p></header>
     <div class="card-content">
@@ -286,7 +286,7 @@ loadFromPages().catch(e => setStatus('加载失败：' + e.message, 'error'));
    pages. System is JS-driven from matchMedia, not a CSS media
    query, so manual Light / Dark always wins over the device theme.
    Collapsed, the toggle shows only the current theme's symbol;
-   the dropdown lists all three, the current one ticked. */
+   the dropdown lists all three symbols, the current one highlighted. */
 (function () {
   var KEY = 'ai-auto-pages-theme';
   var ICONS = { light: '☀', dark: '🌙', system: '🌓' };
