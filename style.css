@@ -63,13 +63,13 @@ footer{text-align:center;color:var(--muted);font-size:12px;line-height:1.6;paddi
 .edit .card-head{padding:13px 16px}
 .edit .product{margin-top:12px}
 .edit .product .card-body{padding:14px 16px}
-.edit .product-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:nowrap}
-.edit .product-head button{width:auto;min-height:0;padding:6px 10px;font-size:13px;font-weight:600;flex:0 0 auto}
-.edit .order-group{display:flex;gap:6px;align-items:center;flex:0 0 auto}
-.edit .order-group button{width:auto;min-height:0;padding:6px 10px;font-size:13px;font-weight:600;flex:0 0 auto}
-.edit .order-input{width:64px;flex:0 0 auto;padding:6px 8px;font-size:13px}
-.edit .tool-group{display:flex;gap:6px;flex:0 0 auto}
-.edit .tool-group button{width:auto;min-height:0;padding:6px 10px;font-size:13px;font-weight:600;flex:0 0 auto}
+.edit .product-head{display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:nowrap}
+.edit .product-head button{width:auto !important;min-height:0;padding:5px 8px;font-size:13px;font-weight:600;flex:0 0 auto;white-space:nowrap}
+.edit .order-group{display:flex;gap:4px;align-items:center;flex:0 0 auto;flex-wrap:nowrap}
+.edit .order-group button{width:auto !important;min-height:0;padding:5px 8px;font-size:13px;font-weight:600;flex:0 0 auto;white-space:nowrap}
+.edit .order-input{width:58px !important;min-width:58px !important;max-width:58px !important;flex:0 0 58px !important;padding:5px 6px !important;font-size:13px;text-align:center}
+.edit .tool-group{display:flex;gap:4px;flex:0 0 auto;flex-wrap:nowrap}
+.edit .tool-group button{width:auto !important;min-height:0;padding:5px 8px;font-size:13px;font-weight:600;flex:0 0 auto;white-space:nowrap}
 .edit .json-preview{white-space:pre-wrap;word-break:break-all;font-size:12px;max-height:320px;overflow:auto;margin:0}
 .edit .preview-label{font-size:13px;color:var(--muted);margin:12px 0 6px}
 /* 编辑页提示区预览：与主页详情区完全一致 */
