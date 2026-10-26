@@ -753,7 +753,7 @@ details p {
    single 44px button cannot collide with it), and on the edit
    page it sits in the container's 44px top padding above the
    first card. Collapsed, the button shows only the current
-   theme's symbol plus a small ▾ to hint it opens; clicking opens
+   theme's symbol; clicking opens
    a dropdown with the three options, each symbol only, the
    current one highlighted. Clicking outside, pressing Escape, or
    choosing an option closes it. */
@@ -783,11 +783,6 @@ details p {
 .theme-switch-icon {
   font-size: 16px;
   line-height: 1;
-}
-.theme-switch-caret {
-  font-size: 9px;
-  line-height: 1;
-  color: var(--bulma-text-weak);
 }
 .theme-switch-menu {
   display: none;
