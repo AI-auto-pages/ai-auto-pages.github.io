@@ -528,13 +528,14 @@ details p {
    previous medium button towering over the input. No has-addons
    join here, so the two controls keep Bulma's grouped gap and the
    primary button keeps its own shadow / hover. */
-.savebar-inner .field.is-grouped {
+.savebar-inner .field.has-addons {
   margin-bottom: 0;
+  width: 100%;
 }
-.savebar-inner .field.is-grouped .control.is-expanded {
+.savebar-inner .field.has-addons .control.is-expanded {
   min-width: 0;
 }
-.savebar-inner .field.is-grouped .control .button {
+.savebar-inner .field.has-addons .control .button {
   white-space: nowrap;
 }
 .edit-section {
@@ -566,6 +567,20 @@ details p {
   transform: none !important;
   background: #f8f7f4;
   border-color: #d9d4cb;
+}
+/* Primary button inside has-addons (savebar): same flat/no-shadow
+   rule, but keep primary teal + white text, hover dark teal only. */
+.field.has-addons .button.is-primary {
+  box-shadow: none !important;
+  transform: none !important;
+}
+.field.has-addons .button.is-primary:not(:disabled):hover,
+.field.has-addons .button.is-primary:not(:disabled):active {
+  background: #0b5f58 !important;
+  border-color: #0b5f58 !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 .order-control {
   flex: 0 0 80px;
