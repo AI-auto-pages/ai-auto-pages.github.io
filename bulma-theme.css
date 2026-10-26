@@ -576,25 +576,31 @@ details p {
    control, with no shadow and no hover effect ============
    Bulma has-addons joins the three buttons into one control
    (shared borders, square inner corners, same height via the
-   height:100% rule below). Unlike the generic has-addons hover
-   (which darkens the background slightly, as on the order button),
-   these three buttons have no hover change at all, as requested:
-   background, border and colour stay exactly as in the normal
-   state, no shadow, no lift, only the pointer cursor changes.
-   Danger keeps its red text / red border in both states.
-   Root cause of the delete-button thickening (v16 missed this):
-   Bulma 1.0.4 gives every outlined button
-   `.button.is-outlined:hover { --bulma-button-border-width:
-   max(2px, 0.125em) }`, i.e. 1px -> 2px on hover. The earlier
-   tool rule only locked border-color, so the width still jumped.
-   Worse, Bulma computes button padding as
-   `padding-horizontal - var(--bulma-button-border-width)`, so the
-   padding shrinks as the border grows, and with addons' -1px
-   shared border the thicker red border paints over the neighbour's
-   border - that is the "neighbour moved" look. The fix locks both
-   the variable and the property at 1px in every interactive state,
-   including Bulma's .is-hovered / .is-focused / .is-active classes,
-   so hover/active/focus cannot change size, padding or border. */
+   height:100% rule below).
+   User clarification 2026-10-26 (supersedes the v16/v17 "no hover
+   change at all" reading): hover must work like the order control's
+   confirm button - background changes clearly, border must NOT
+   change at all, otherwise it looks strange. V17 failed this in
+   two ways: its background stayed white, so the only visible
+   change on hover was the seam, and Bulma's addons rule raises a
+   hovered button to z-index 2, so hovering "下移" painted its grey
+   right border over "删除"'s red left border and the red seam
+   turned grey - a border change even though the button's own
+   border-color/width were locked. So v18 does three things:
+   (1) hover/active/focus background changes to a clear tint
+   (up/down: scheme-main-ter, delete: light red #fef2f2, the same
+   tint the generic danger hover already uses), text colour
+   unchanged (delete stays red);
+   (2) border is locked in every interactive state: width 1px
+   (both the property and Bulma's --bulma-button-border-width
+   variable, which also drives padding - Bulma 1.0.4's
+   `.button.is-outlined:hover` otherwise raises it to
+   max(2px, 0.125em)), colour locked to the normal colour
+   (grey for up/down, danger red for delete), no shadow, no lift;
+   (3) z-index is locked to auto in every interactive state, so
+   a hovered button is NOT raised above its neighbours and the
+   shared seam keeps its normal colour (in particular the
+   down/delete seam stays red when hovering "下移"). */
 .tool-addons .button {
   min-height: 36px;
   padding: 7px 12px;
@@ -612,12 +618,13 @@ details p {
 .tool-addons .button:not(:disabled).is-active {
   box-shadow: none !important;
   transform: none !important;
-  background: #fff !important;
+  background: var(--bulma-scheme-main-ter) !important;
   border-color: var(--bulma-border) !important;
   border-width: 1px !important;
   --bulma-button-border-width: 1px !important;
   --bulma-button-outer-shadow-alpha: 0 !important;
   color: var(--bulma-text) !important;
+  z-index: auto !important;
 }
 .tool-addons .button.is-danger.is-outlined:not(:disabled):hover,
 .tool-addons .button.is-danger.is-outlined:not(:disabled):active,
@@ -625,12 +632,13 @@ details p {
 .tool-addons .button.is-danger.is-outlined:not(:disabled).is-hovered,
 .tool-addons .button.is-danger.is-outlined:not(:disabled).is-focused,
 .tool-addons .button.is-danger.is-outlined:not(:disabled).is-active {
-  background: #fff !important;
+  background: #fef2f2 !important;
   border-color: var(--bulma-danger) !important;
   border-width: 1px !important;
   --bulma-button-border-width: 1px !important;
   --bulma-button-outer-shadow-alpha: 0 !important;
   color: var(--bulma-danger) !important;
+  z-index: auto !important;
 }
 .level-right .field {
   margin-bottom: 0;
