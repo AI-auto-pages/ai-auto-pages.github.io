@@ -1,1 +1,104 @@
-{"faq":[{"answer":"把链接里的蓝奏云域名换成你能访问的域名再打开，也可以通过搜索找到当前可用的蓝奏云域名。","question":"蓝奏云打不开？"}],"projects":[{"id":"collection-1-15","name":"（免费）","supportUrl":""},{"id":"collection-16-20","name":"","supportUrl":""},{"id":"ran-16","name":"染-16(4.3w)","supportUrl":""},{"id":"ran-17","name":"染-17(5w)","supportUrl":""},{"id":"ran-18","name":"染-18(5w)","supportUrl":""},{"id":"ran-19","name":"染-19(4w)","supportUrl":""},{"id":"ran-20","name":"染-20(3.5w)","supportUrl":""},{"id":"ran-21","name":"染-21(6.4w)","supportUrl":""},{"id":"ran-22","name":"染-22(4.3w)","supportUrl":""},{"id":"ran-23","name":"染-23(2.9w)","supportUrl":""},{"id":"ran-24","name":"染-24(3.9w)","supportUrl":""},{"id":"ran-25","name":"染-25(4.7w)","supportUrl":""},{"id":"ran-26","name":"染-26(4.9w)","supportUrl":""},{"id":"ran-27","name":"染-27(3.8w)","supportUrl":""},{"id":"collection-21-25","name":"","supportUrl":""},{"id":"ran-28","name":"染-28(3w)","supportUrl":""},{"id":"ran-29","name":"染-29(3w)","supportUrl":""},{"id":"tip","name":"随意打赏（修改调整打赏金额）","supportUrl":""}],"site":{"permanentUrl":"https://ai-auto-pages.github.io/","title":"妖者发电站"}}
+{
+  "faq": [
+    {
+      "answer": "把链接里的蓝奏云域名换成你能访问的域名再打开，也可以通过搜索找到当前可用的蓝奏云域名。",
+      "question": "蓝奏云打不开？"
+    }
+  ],
+  "projects": [
+    {
+      "id": "collection-1-15",
+      "name": "【1-15合集】（免费）",
+      "supportUrl": ""
+    },
+    {
+      "id": "collection-16-20",
+      "name": "【16-20合集】",
+      "supportUrl": ""
+    },
+    {
+      "id": "ran-16",
+      "name": "染-16(4.3w)",
+      "supportUrl": ""
+    },
+    {
+      "id": "ran-17",
+      "name": "染-17(5w)",
+      "supportUrl": ""
+    },
+    {
+      "id": "ran-18",
+      "name": "染-18(5w)",
+      "supportUrl": ""
+    },
+    {
+      "id": "ran-19",
+      "name": "染-19(4w)",
+      "supportUrl": ""
+    },
+    {
+      "id": "ran-20",
+      "name": "染-20(3.5w)",
+      "supportUrl": ""
+    },
+    {
+      "id": "ran-21",
+      "name": "染-21(6.4w)",
+      "supportUrl": ""
+    },
+    {
+      "id": "ran-22",
+      "name": "染-22(4.3w)",
+      "supportUrl": ""
+    },
+    {
+      "id": "ran-23",
+      "name": "染-23(2.9w)",
+      "supportUrl": ""
+    },
+    {
+      "id": "ran-24",
+      "name": "染-24(3.9w)",
+      "supportUrl": ""
+    },
+    {
+      "id": "ran-25",
+      "name": "染-25(4.7w)",
+      "supportUrl": ""
+    },
+    {
+      "id": "ran-26",
+      "name": "染-26(4.9w)",
+      "supportUrl": ""
+    },
+    {
+      "id": "ran-27",
+      "name": "染-27(3.8w)",
+      "supportUrl": ""
+    },
+    {
+      "id": "collection-21-25",
+      "name": "【21-25合集】",
+      "supportUrl": ""
+    },
+    {
+      "id": "ran-28",
+      "name": "染-28(3w)",
+      "supportUrl": ""
+    },
+    {
+      "id": "ran-29",
+      "name": "染-29(3w)",
+      "supportUrl": ""
+    },
+    {
+      "id": "tip",
+      "name": "随意打赏（修改【购买数量】调整打赏金额）",
+      "supportUrl": ""
+    }
+  ],
+  "site": {
+    "permanentUrl": "https://ai-auto-pages.github.io/",
+    "title": "妖者发电站"
+  }
+}
