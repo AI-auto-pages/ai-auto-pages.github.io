@@ -113,36 +113,13 @@ const detail = document.getElementById('detail');
 const btn = document.getElementById('actionBtn');
 let products = [];
 
-function transformProduct(p, apiUrlValue){
-  try {
-    if (!p.url) return p;
-    const urlObj = new URL(p.url);
-    const params = new URLSearchParams(urlObj.search);
-    const sku = params.get('sku');
-    if (!sku) return p;
-    const skuArray = JSON.parse(decodeURIComponent(sku));
-    if (!skuArray || !skuArray[0]) return p;
-    skuArray[0].count = p.price || 1;
-    params.set('sku', JSON.stringify(skuArray));
-    const timestamp = Date.now().toString();
-    const randomNum = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-    p.custom_order_id = '[' + timestamp + randomNum + '][' + p.gcode + '][' + p.cipher_key + ']';
-    params.set('custom_order_id', p.custom_order_id);
-    p.url = urlObj.origin + urlObj.pathname + '?' + params.toString();
-    p.sku_id = skuArray[0].sku_id;
-    if (apiUrlValue) {
-      p.pay_url = apiUrlValue + '/pay-in1?i=' + p.plan_id + '&sk=' + p.sku_id + '&pr=' + p.price + '&co=' + timestamp + randomNum + '&g=' + p.gcode + '&k=' + p.cipher_key;
-    }
-  } catch (e) {}
-  return p;
-}
 async function load(){
   try {
-    const res = await fetch('data/admin.json?' + Date.now());
+    const res = await fetch('data/site.json?' + Date.now());
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     if (data.title) { document.getElementById('siteTitle').textContent = data.title; document.title = data.title; }
-    products = (data.products || []).map(p => transformProduct(Object.assign({}, p), data.api_url || ''));
+    products = data.products || [];
     select.innerHTML = '<option value="">请选择</option>' + products.map((p, i) => '<option value="' + i + '">' + p.name + '</option>').join('');
   } catch (e) {
     select.innerHTML = '<option value="">数据加载失败，请刷新重试</option>';
@@ -160,7 +137,7 @@ btn.addEventListener('click', () => {
   const idx = select.value === '' ? -1 : Number(select.value);
   const p = idx >= 0 ? products[idx] : null;
   if (!p) return;
-  const target = p.pay_url || p.url;
+  const target = p.url;
   if (target) window.open(target, '_blank');
 });
 load();
