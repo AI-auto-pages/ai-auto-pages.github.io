@@ -63,12 +63,17 @@
   --bulma-box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
-/* Site layout: narrower than Bulma's default container */
+/* Site layout: narrower than Bulma's default container.
+   Bulma's desktop container rule uses a higher-specificity
+   .container:not(...) selector, so plain max-width loses on PC.
+   Use !important here to keep the old 620px / 760px widths. */
 .site-container {
-  max-width: 620px;
+  max-width: 620px !important;
+  width: 100% !important;
 }
 .edit-container {
-  max-width: 760px;
+  max-width: 760px !important;
+  width: 100% !important;
 }
 
 /* Homepage: one screen on PC, like before */
@@ -110,6 +115,11 @@
   padding: 0;
   font-size: 17px;
   letter-spacing: 0.02em;
+  /* Bulma defaults flex-grow to 1, which makes the title box stretch
+     and leaves blank space after the text. Keep it text-width only,
+     so the ::after gradient line fills the rest. */
+  flex-grow: 0 !important;
+  flex-shrink: 0;
 }
 .card-header::after {
   content: "";
@@ -211,12 +221,28 @@ details p {
   padding-bottom: 150px;
 }
 
-/* Order control: Bulma has-addons, input width 80px, no inline styles */
+/* Order control: Bulma Form addons, written exactly as Bulma documents it.
+   .field.has-addons joins the controls with a single shared border and
+   square inner corners. Force both controls to stretch to the same height
+   so the bottom borders line up, instead of relying on input/button
+   default heights which can differ by a pixel. */
+.field.has-addons {
+  align-items: stretch;
+}
+.field.has-addons .control {
+  align-self: stretch;
+  display: flex;
+}
+.field.has-addons .control .input,
+.field.has-addons .control .button {
+  height: 100%;
+}
 .order-control {
   flex: 0 0 80px;
   width: 80px;
 }
 .order-control .input {
+  width: 100%;
   text-align: center;
 }
 
