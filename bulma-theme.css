@@ -517,17 +517,18 @@ details p {
   max-width: 760px;
   margin: 0 auto;
 }
-/* Savebar per Bulma Form general, is-grouped + is-expanded:
-   <div class="field is-grouped">
+/* Savebar per Bulma Form general, has-addons + is-expanded:
+   <div class="field has-addons">
      <p class="control is-expanded"><input></p>
      <p class="control"><button></button></p>
    </div>
    The token control expands to fill the remaining space, the button
-   stays its natural width, and both are normal size (no is-medium),
-   so input and button share the same 40px height instead of the
-   previous medium button towering over the input. No has-addons
-   join here, so the two controls keep Bulma's grouped gap and the
-   primary button keeps its own shadow / hover. */
+   stays its natural width, and has-addons stretch + height:100%
+   forces input and button to the exact same height, instead of
+   the previous grouped version where the button still looked
+   taller (its shadow halo plus independent heights). Joined
+   controls share one border, primary button in addons is flat
+   (no shadow/lift) but keeps teal + white text, hover dark teal. */
 .savebar-inner .field.has-addons {
   margin-bottom: 0;
   width: 100%;
