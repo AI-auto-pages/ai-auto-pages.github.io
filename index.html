@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI-auto-pages 发电站</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#f6f7fb;color:#1f2937;line-height:1.7}
+header{background:linear-gradient(135deg,#4f46e5,#06b6d4);color:#fff;padding:48px 20px 36px;text-align:center}
+header h1{margin:0;font-size:32px;letter-spacing:.02em}
+header p{margin:10px auto 0;max-width:640px;opacity:.92}
+main{max-width:760px;margin:-18px auto 40px;padding:0 16px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:20px;margin-top:16px;box-shadow:0 6px 20px rgba(0,0,0,.05)}
+.card h2{margin:0 0 10px;font-size:19px}
+.muted{color:#6b7280;font-size:14px}
+select,input{width:100%;font-size:16px;padding:12px;border:1px solid #d1d5db;border-radius:10px;background:#fff}
+button{width:100%;font-size:17px;padding:13px;border:0;border-radius:10px;background:#4f46e5;color:#fff;cursor:pointer;margin-top:12px}
+button:disabled{background:#9ca3af;cursor:not-allowed}
+button.secondary{background:#fff;color:#4f46e5;border:1px solid #c7d2fe}
+.detail{display:none;margin-top:14px;padding:14px;background:#f0f9ff;border:1px solid #bae6fd;border-radius:12px}
+.detail.show{display:block}
+.tag{display:inline-block;background:#eef2ff;color:#4f46e5;padding:2px 10px;border-radius:999px;font-size:13px;margin-right:6px}
+code{word-break:break-all}
+footer{text-align:center;color:#6b7280;font-size:13px;padding:20px}
+@media (prefers-color-scheme: dark){body{background:#111827;color:#f3f4f6}.card{background:#1f2937;border-color:#374151}select,input{background:#111827;color:#f3f4f6;border-color:#374151}.detail{background:#0f172a;border-color:#1e40af}}
+</style>
+</head>
+<body>
+<header>
+<h1 id="siteTitle">AI-auto-pages 发电站</h1>
+<p>收藏本页，方便下次回来。支持原创，感谢每一份支持。</p>
+</header>
+<main>
+<section class="card">
+<h2>说明</h2>
+<p>请认准本页面，建议收藏。</p>
+<p>永久地址：<a id="permanentLink" href="https://ai-auto-pages.github.io/">https://ai-auto-pages.github.io/</a></p>
+<p id="backupLine" class="muted" style="display:none">备用地址：<a id="backupLink" href="#"></a></p>
+<p class="muted">支持作者不易，乐意的话可以多支持几份。具体项目和价格请看下面的下拉框，数据都放在 data/projects.json 里，改 JSON 就能更新页面，不用改 HTML。</p>
+</section>
+
+<section class="card">
+<h2>选择项目</h2>
+<label class="muted" for="projectSelect">选择项目</label>
+<select id="projectSelect"><option>数据加载中……</option></select>
+<div id="detail" class="detail"></div>
+<button id="actionBtn" disabled>请先选择</button>
+<p class="muted" id="hint">先在上面选一个项目，按钮才会变成可点状态。</p>
+</section>
+
+<section class="card">
+<h2>常见问题</h2>
+<div id="faq"></div>
+</section>
+
+<section class="card">
+<h2>如何改数据</h2>
+<ol>
+<li>打开仓库里的 <code>data/projects.json</code>。</li>
+<li>在 <code>projects</code> 里改名字、价格、说明和支持链接，保存提交即可。</li>
+<li>刷新本页，下拉框会自动读取新的 JSON。</li>
+</ol>
+<p class="muted">本页为支持展示页，具体支持流程请以你自己在 JSON 里填写的链接为准。</p>
+</section>
+</main>
+<footer>本页面由粉丝支持赞助，与其他任何平台以及平台用户无关。</footer>
+<script>
+const select = document.getElementById('projectSelect');
+const detail = document.getElementById('detail');
+const btn = document.getElementById('actionBtn');
+const hint = document.getElementById('hint');
+let projects = [];
+fetch('data/projects.json').then(r => r.json()).then(data => {
+  if (data.site && data.site.title) { document.getElementById('siteTitle').textContent = data.site.title; document.title = data.site.title; }
+  if (data.site && data.site.permanentUrl) { const a = document.getElementById('permanentLink'); a.href = data.site.permanentUrl; a.textContent = data.site.permanentUrl; }
+  if (data.site && data.site.backupUrl) { document.getElementById('backupLine').style.display = 'block'; const b = document.getElementById('backupLink'); b.href = data.site.backupUrl; b.textContent = data.site.backupUrl; }
+  projects = data.projects || [];
+  select.innerHTML = '<option value="">请选择</option>' + projects.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+  const faqEl = document.getElementById('faq');
+  faqEl.innerHTML = (data.faq || []).map(f => `<h3>${f.question}</h3><p>${f.answer}</p>`).join('');
+}).catch(() => { select.innerHTML = '<option value="">数据加载失败，请刷新重试</option>'; });
+select.addEventListener('change', () => {
+  const p = projects.find(x => x.id === select.value);
+  if (!p) { detail.classList.remove('show'); btn.disabled = true; btn.textContent = '请先选择'; hint.textContent = '先在上面选一个项目，按钮才会变成可点状态。'; return; }
+  detail.classList.add('show');
+  detail.innerHTML = `<div><span class="tag">${p.price || ''}</span><strong>${p.name}</strong></div><p>${p.description || ''}</p>` + (p.supportUrl ? `<p><a href="${p.supportUrl}">打开支持链接</a></p>` : `<p class="muted">支持链接尚未在 JSON 里填写，填写 supportUrl 后这里会显示链接。</p>`);
+  btn.disabled = false; btn.textContent = '去发电'; hint.textContent = '已选好项目，点上面按钮继续。';
+});
+btn.addEventListener('click', () => {
+  const p = projects.find(x => x.id === select.value);
+  if (!p) return;
+  if (p.supportUrl) { window.open(p.supportUrl, '_blank'); } else { alert('这个项目的支持链接还没在 data/projects.json 里填写，请先填写 supportUrl。'); }
+});
+</script>
+</body>
+</html>
