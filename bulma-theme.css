@@ -741,89 +741,84 @@ details p {
   color: var(--bulma-text-weak);
 }
 
-/* ============ Theme switch: one button + dropdown, inside the
-   content container ============
+/* ============ Theme switch: quiet three-symbol segmented group,
+   inside the content container ============
    Why not fixed top-right of the screen: on a wide PC the screen
    corner is hundreds of pixels away from the centred content
-   column, so the button looked detached. Now the button is
+   column, so the button looked detached. Now the group is
    absolutely positioned at the top-right of .site-container /
    .edit-container itself, so its right edge lines up with the
    cards' right edge on every screen size. It takes no layout
-   space: on the homepage it sits beside the centred title (a
-   single 44px button cannot collide with it), and on the edit
-   page it sits in the container's 44px top padding above the
-   first card. Collapsed, the button shows only the current
-   theme's symbol; clicking opens
-   a dropdown with the three options, each symbol only, the
-   current one highlighted. Clicking outside, pressing Escape, or
-   choosing an option closes it. */
+   space: on the homepage it sits beside the centred title, and
+   on the edit page it sits in the container's 44px top padding
+   above the first card.
+   Deliberately low-key: only 30px tall, no shadow on the track,
+   muted icons, and the sliding pill is just the card colour, so
+   the control reads as a small utility, not a primary action.
+   The pill slides by CSS transition on the group's data-active
+   attribute (light 2px, dark 32px, system 62px: three 30px
+   buttons plus 2px padding). It only transitions once the group
+   has the ready class, so it does not slide on page load. */
 .theme-switch {
   position: absolute;
   top: 0;
   right: 0;
   z-index: 40;
 }
-.theme-switch-toggle {
+.theme-switch-group {
+  position: relative;
   display: flex;
-  align-items: center;
-  gap: 3px;
-  height: 36px;
-  padding: 0 10px;
+  height: 30px;
+  padding: 2px;
   border: 1px solid var(--bulma-border);
   border-radius: 9999px;
-  background: var(--bulma-scheme-main-bis);
-  color: var(--bulma-text);
-  box-shadow: var(--bulma-shadow);
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-}
-.theme-switch-toggle:hover {
   background: var(--bulma-scheme-main-ter);
+  box-shadow: none;
 }
-.theme-switch-icon {
-  font-size: 16px;
-  line-height: 1;
-}
-.theme-switch-menu {
-  display: none;
+.theme-switch-thumb {
   position: absolute;
-  top: calc(100% + 6px);
-  right: 0;
-  min-width: 64px;
-  padding: 4px;
+  top: 2px;
+  left: 2px;
+  width: 30px;
+  height: 26px;
+  border-radius: 9999px;
   background: var(--bulma-scheme-main-bis);
-  border: 1px solid var(--bulma-border);
-  border-radius: 12px;
-  box-shadow: var(--bulma-shadow);
-  z-index: 50;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  z-index: 0;
 }
-.theme-switch.open .theme-switch-menu {
-  display: block;
+.theme-switch-group[data-active="dark"] .theme-switch-thumb {
+  left: 32px;
 }
-.theme-switch-menu button {
+.theme-switch-group[data-active="system"] .theme-switch-thumb {
+  left: 62px;
+}
+.theme-switch-group.ready .theme-switch-thumb {
+  transition: left 0.25s ease;
+}
+.theme-switch-group button {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  padding: 8px;
+  width: 30px;
+  height: 26px;
+  padding: 0;
   border: none;
-  border-radius: 8px;
+  border-radius: 9999px;
   background: transparent;
-  color: var(--bulma-text);
-  font-size: 18px;
-  text-align: center;
+  color: var(--bulma-text-weak);
+  font-size: 14px;
+  line-height: 1;
   cursor: pointer;
 }
-.theme-switch-menu button:hover {
-  background: var(--bulma-scheme-main-ter);
+.theme-switch-group button:hover {
+  color: var(--bulma-text);
 }
-.theme-switch-menu button.is-active {
-  background: var(--bulma-primary-soft);
-  color: var(--bulma-primary);
-  font-weight: 700;
+.theme-switch-group button.is-active {
+  color: var(--bulma-text-strong);
 }
-.theme-switch-toggle:focus-visible,
-.theme-switch-menu button:focus-visible {
+.theme-switch-group button:focus-visible {
   outline: 2px solid var(--bulma-primary);
   outline-offset: 2px;
 }
