@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>编辑</title>
 <meta name="robots" content="noindex, nofollow">
-<link rel="stylesheet" href="style.css?v=20261026-4">
+<link rel="stylesheet" href="style.css?v=20261026-5">
 </head>
 <body class="edit">
 <main class="wrap">
@@ -121,7 +121,7 @@ function renderForm(){
     card.className = 'card product';
     card.innerHTML =
       '<div class="card-body">' +
-      '<div class="product-head"><span class="order-group" style="display:inline-flex;gap:0;align-items:stretch;height:32px"><input class="orderInput" type="number" min="1" max="999" size="3" inputmode="numeric" autocomplete="off" style="width:58px;height:32px;padding:0 6px;text-align:center;border:1px solid #d8dee6;border-right:none;border-top-left-radius:8px;border-bottom-left-radius:8px;border-top-right-radius:0;border-bottom-right-radius:0;box-sizing:border-box"><button type="button" class="secondary orderBtn" style="height:32px;padding:0 10px;border:1px solid #d8dee6;border-left:none;border-top-left-radius:0;border-bottom-left-radius:0;border-top-right-radius:8px;border-bottom-right-radius:8px;background:#f6f8fa;transform:none">确定</button></span><span class="tool-group"><button type="button" class="secondary upBtn">上移</button><button type="button" class="secondary downBtn">下移</button><button type="button" class="danger delBtn">删除</button></span></div>' +
+      '<div class="product-head"><span class="order-group"><input class="orderInput" type="number" min="1" max="999" size="3" inputmode="numeric" autocomplete="off"><button type="button" class="secondary orderBtn">确定</button></span><span class="tool-group"><button type="button" class="secondary upBtn">上移</button><button type="button" class="secondary downBtn">下移</button><button type="button" class="danger delBtn">删除</button></span></div>' +
       '<label>名称</label><input class="pName" type="text">' +
       '<label>链接</label><input class="pUrl" type="text" autocomplete="off">' +
       '<label>价格</label><input class="pPrice" type="number" step="any">' +
