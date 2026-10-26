@@ -1,0 +1,232 @@
+/* Bulma v1 custom theme for AI-auto-pages, CSS-variables only, no Sass build.
+   Load order:
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+     <link rel="stylesheet" href="bulma-theme.css">
+   Fonts: Bulma default, deliberately NOT overridden here.
+   Palette: teal primary #0f766e, gold warning #d97706, warm off-white scheme.
+   Card-header keeps the old site's look: gradient background, a teal-to-gold
+   accent bar before the title (::before), and a fading gradient line after
+   the title (::after). */
+
+:root {
+  /* Primary: teal #0f766e */
+  --bulma-primary-h: 175;
+  --bulma-primary-s: 77%;
+  --bulma-primary-l: 26%;
+  /* Link uses the same teal */
+  --bulma-link-h: 175;
+  --bulma-link-s: 77%;
+  --bulma-link-l: 26%;
+  /* Warning / accent: gold #d97706 */
+  --bulma-warning-h: 32;
+  --bulma-warning-s: 95%;
+  --bulma-warning-l: 44%;
+  /* Danger: site red */
+  --bulma-danger-h: 0;
+  --bulma-danger-s: 72%;
+  --bulma-danger-l: 51%;
+  /* Scheme: warm off-white background, warm dark text */
+  --bulma-scheme-main: #f6f5f2;
+  --bulma-scheme-main-bis: #fff;
+  --bulma-text: #1c1917;
+  --bulma-text-strong: #1c1917;
+  --bulma-text-weak: #78716c;
+  --bulma-border: #e9e6e1;
+  --bulma-border-weak: #e9e6e1;
+  /* Radii: cards 10px, controls 8px */
+  --bulma-radius: 8px;
+  --bulma-radius-large: 10px;
+  --bulma-radius-small: 6px;
+  --bulma-card-shadow: 0 8px 24px rgba(28, 25, 23, 0.06);
+  --bulma-box-shadow: 0 8px 24px rgba(28, 25, 23, 0.06);
+}
+
+[data-theme="dark"],
+.theme-dark {
+  --bulma-primary-h: 171;
+  --bulma-primary-s: 77%;
+  --bulma-primary-l: 64%;
+  --bulma-link-h: 171;
+  --bulma-link-s: 77%;
+  --bulma-link-l: 64%;
+  --bulma-warning-h: 43;
+  --bulma-warning-s: 96%;
+  --bulma-warning-l: 56%;
+  --bulma-scheme-main: #0c0a09;
+  --bulma-scheme-main-bis: #1c1917;
+  --bulma-text: #fafaf9;
+  --bulma-text-strong: #fafaf9;
+  --bulma-text-weak: #a8a29e;
+  --bulma-border: #292524;
+  --bulma-border-weak: #292524;
+  --bulma-card-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --bulma-box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* Site layout: narrower than Bulma's default container */
+.site-container {
+  max-width: 620px;
+}
+.edit-container {
+  max-width: 760px;
+}
+
+/* Homepage: one screen on PC, like before */
+@media (min-width: 768px) {
+  .site-section {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .site-section .container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}
+
+/* Card header: old visual, now on Bulma's .card-header.
+   Gradient background, accent bar before title, fading line after title. */
+.card-header {
+  background: linear-gradient(90deg, rgba(15, 118, 110, 0.09), rgba(15, 118, 110, 0) 72%);
+  border-bottom: 1px solid var(--bulma-border);
+  box-shadow: none;
+  align-items: center;
+  gap: 11px;
+  padding: 15px 18px;
+}
+.card-header::before {
+  content: "";
+  width: 5px;
+  height: 20px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, var(--bulma-primary), var(--bulma-warning));
+  flex: none;
+}
+.card-header-title {
+  padding: 0;
+  font-size: 17px;
+  letter-spacing: 0.02em;
+}
+.card-header::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(15, 118, 110, 0.25), rgba(15, 118, 110, 0));
+  margin-left: 4px;
+}
+
+/* Detail / preview boxes: tips and FAQ answers, light grey box like before */
+.detail,
+.preview {
+  display: none;
+  margin-top: 14px;
+  padding: 13px 14px;
+  background: #f5f5f4;
+  border: 1px solid var(--bulma-border);
+  border-radius: 8px;
+  max-height: 210px;
+  overflow-y: auto;
+}
+.detail.show,
+.preview.show {
+  display: block;
+}
+/* Edit-page preview is always visible once rendered */
+.edit .preview {
+  display: block;
+  margin-top: 10px;
+}
+.preview p,
+.detail p {
+  margin: 8px 0;
+}
+
+/* FAQ details: keep the + / - marker from before */
+details {
+  padding: 2px 0;
+}
+summary {
+  cursor: pointer;
+  font-weight: 650;
+  list-style: none;
+}
+summary::-webkit-details-marker {
+  display: none;
+}
+summary::after {
+  content: "+";
+  float: right;
+  color: var(--bulma-text-weak);
+}
+details[open] summary::after {
+  content: "−";
+}
+details p {
+  margin: 10px 0 2px;
+  color: var(--bulma-text-weak);
+  font-size: 14px;
+}
+
+/* Edit page: section title above the FAQ list, JSON preview, save bar */
+.edit .section-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 20px 0 4px;
+}
+.edit .json-preview {
+  white-space: pre-wrap;
+  word-break: break-all;
+  font-size: 12px;
+  max-height: 320px;
+  overflow: auto;
+  margin: 0;
+}
+.edit .preview-label {
+  font-size: 13px;
+  color: var(--bulma-text-weak);
+  margin: 12px 0 6px;
+}
+.savebar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.96);
+  border-top: 1px solid var(--bulma-border);
+  padding: 12px 16px;
+  z-index: 20;
+}
+.savebar-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.edit-section {
+  padding-bottom: 150px;
+}
+
+/* Order control: Bulma has-addons, input width 80px, no inline styles */
+.order-control {
+  flex: 0 0 80px;
+  width: 80px;
+}
+.order-control .input {
+  text-align: center;
+}
+
+/* Dark mode: detail / preview / savebar backgrounds */
+@media (prefers-color-scheme: dark) {
+  .detail,
+  .preview {
+    background: #292524;
+  }
+  .savebar {
+    background: rgba(28, 25, 23, 0.96);
+  }
+}

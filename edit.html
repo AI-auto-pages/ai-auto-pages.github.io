@@ -5,47 +5,52 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>编辑</title>
 <meta name="robots" content="noindex, nofollow">
-<link rel="stylesheet" href="style.css?v=20261026-7">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+<link rel="stylesheet" href="bulma-theme.css?v=20261026-8">
 </head>
 <body class="edit">
-<main class="wrap">
-  <section class="card">
-    <div class="card-head"><h2>基本设置</h2></div>
-    <div class="card-body">
-      <label for="fTitle">页面标题</label>
-      <input id="fTitle" type="text">
+<section class="section edit-section">
+<div class="container edit-container">
+  <div class="card mb-4">
+    <header class="card-header"><p class="card-header-title">基本设置</p></header>
+    <div class="card-content">
+      <div class="field">
+        <label class="label" for="fTitle">页面标题</label>
+        <div class="control"><input id="fTitle" class="input" type="text"></div>
+      </div>
     </div>
-  </section>
+  </div>
 
   <div id="productList"></div>
 
-  <div class="row" style="margin-top:14px">
-    <button id="addBtn" type="button" class="secondary">新增项目</button>
-    <button id="downloadBtn" type="button" class="secondary">下载 JSON 备份</button>
+  <div class="buttons mt-4">
+    <button id="addBtn" type="button" class="button">新增项目</button>
+    <button id="downloadBtn" type="button" class="button">下载 JSON 备份</button>
   </div>
 
   <div class="section-title">常见问题</div>
   <div id="faqList"></div>
-  <div class="row" style="margin-top:14px">
-    <button id="addFaqBtn" type="button" class="secondary">新增常见问题</button>
+  <div class="buttons mt-4">
+    <button id="addFaqBtn" type="button" class="button">新增常见问题</button>
   </div>
 
-  <div id="status" class="status">正在加载当前 JSON……</div>
+  <div id="status" class="notification mt-4">正在加载当前 JSON……</div>
 
-  <section class="card">
-    <div class="card-head"><h2>JSON 预览</h2></div>
-    <div class="card-body">
+  <div class="card mt-4">
+    <header class="card-header"><p class="card-header-title">JSON 预览</p></header>
+    <div class="card-content">
       <details>
-        <summary style="cursor:pointer;font-weight:650">查看当前 JSON（只读预览）</summary>
+        <summary>查看当前 JSON（只读预览）</summary>
         <pre id="jsonPreview" class="json-preview"></pre>
       </details>
     </div>
-  </section>
-</main>
+  </div>
+</div>
+</section>
 
 <div class="savebar"><div class="savebar-inner">
-  <input id="token" type="password" placeholder="令牌" autocomplete="off">
-  <button id="saveBtn" type="button">保存并提交到仓库</button>
+  <input id="token" class="input" type="password" placeholder="令牌" autocomplete="off">
+  <button id="saveBtn" type="button" class="button is-primary is-fullwidth is-medium">保存并提交到仓库</button>
 </div></div>
 
 <script>
@@ -60,7 +65,7 @@ let originalJsonText = '';
 function setStatus(msg, kind){
   const el = $('status');
   el.textContent = msg;
-  el.className = 'status' + (kind ? ' ' + kind : '');
+  el.className = 'notification mt-4' + (kind === 'error' ? ' is-danger' : kind === 'ok' ? ' is-success' : '');
 }
 function decodeB64(b64){
   const bin = atob(String(b64).replace(/\s/g,''));
@@ -131,15 +136,15 @@ function renderForm(){
   const list = $('productList');
   list.innerHTML = '';
   (data.products || []).forEach((p) => {
-    const card = document.createElement('section');
-    card.className = 'card product';
+    const card = document.createElement('div');
+    card.className = 'card product mb-4';
     card.innerHTML =
-      '<div class="card-body">' +
-      '<div class="product-head"><span class="order-group"><input class="orderInput" type="number" min="1" max="999" size="3" inputmode="numeric" autocomplete="off"><button type="button" class="secondary orderBtn">确定</button></span><span class="tool-group"><button type="button" class="secondary upBtn">上移</button><button type="button" class="secondary downBtn">下移</button><button type="button" class="danger delBtn">删除</button></span></div>' +
-      '<label>名称</label><input class="pName" type="text">' +
-      '<label>链接</label><input class="pUrl" type="text" autocomplete="off">' +
-      '<label>价格</label><input class="pPrice" type="number" step="any">' +
-      '<label>提示区</label><textarea class="pTips"></textarea>' +
+      '<div class="card-content">' +
+      '<div class="level is-mobile"><div class="level-left"><div class="field has-addons"><p class="control order-control"><input class="input orderInput" type="number" min="1" max="999" size="3" inputmode="numeric" autocomplete="off"></p><p class="control"><button type="button" class="button orderBtn">确定</button></p></div></div><div class="level-right"><div class="buttons are-small"><button type="button" class="button upBtn">上移</button><button type="button" class="button downBtn">下移</button><button type="button" class="button is-danger is-outlined delBtn">删除</button></div></div></div>' +
+      '<div class="field"><label class="label">名称</label><div class="control"><input class="input pName" type="text"></div></div>' +
+      '<div class="field"><label class="label">链接</label><div class="control"><input class="input pUrl" type="text" autocomplete="off"></div></div>' +
+      '<div class="field"><label class="label">价格</label><div class="control"><input class="input pPrice" type="number" step="any"></div></div>' +
+      '<div class="field"><label class="label">提示区</label><div class="control"><textarea class="textarea pTips"></textarea></div></div>' +
       '<div class="preview-label">预览</div>' +
       '<div class="preview"></div>' +
       '</div>';
@@ -168,13 +173,13 @@ function renderForm(){
   (data.faqs || []).forEach((f) => {
     const question = f['问题'] || f.question || '';
     const answer = f['回答'] || f.answer || '';
-    const card = document.createElement('section');
-    card.className = 'card faq';
+    const card = document.createElement('div');
+    card.className = 'card faq mb-4';
     card.innerHTML =
-      '<div class="card-body">' +
-      '<div class="faq-head"><span class="tool-group"><button type="button" class="secondary upBtn">上移</button><button type="button" class="secondary downBtn">下移</button><button type="button" class="danger delBtn">删除</button></span></div>' +
-      '<label>问题</label><input class="fQuestion" type="text">' +
-      '<label>回答</label><textarea class="fAnswer"></textarea>' +
+      '<div class="card-content">' +
+      '<div class="faq-head"><div class="buttons are-small"><button type="button" class="button upBtn">上移</button><button type="button" class="button downBtn">下移</button><button type="button" class="button is-danger is-outlined delBtn">删除</button></div></div>' +
+      '<div class="field"><label class="label">问题</label><div class="control"><input class="input fQuestion" type="text"></div></div>' +
+      '<div class="field"><label class="label">回答</label><div class="control"><textarea class="textarea fAnswer"></textarea></div></div>' +
       '<div class="preview-label">预览</div>' +
       '<div class="preview"></div>' +
       '</div>';
@@ -196,7 +201,6 @@ async function loadFromPages(){
   setStatus('已加载当前 JSON。', 'ok');
 }
 $('addBtn').addEventListener('click', () => {
-  // 先以当前页面顺序为准，再追加，避免新增后重新渲染丢掉刚排好的顺序
   const current = document.querySelectorAll('.product').length ? collectFromForm() : (data || { title: $('fTitle').value, products: [] });
   data = current;
   if (!data.products) data.products = [];

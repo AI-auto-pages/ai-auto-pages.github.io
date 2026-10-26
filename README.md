@@ -36,7 +36,7 @@ JSON 结构已经简化，只保留三项：
 
 ## 样式与编辑页
 
-主页和编辑页共用同一个 `style.css`，卡片、字体、颜色完全统一，全部使用苹果字体。
+主页和编辑页使用 Bulma 1.0.4（CDN）加自定义主题 `bulma-theme.css`，字体用 Bulma 默认字体，不再用苹果字体优先。卡片、按钮、下拉、表单、按钮组等都用 Bulma 自带组件：卡片用 `card` / `card-header` / `card-content`，按钮用 `button`，下拉用 `select is-fullwidth`，表单用 `field` / `label` / `control` / `input` / `textarea`，序号控件用 `field has-addons`，上下移删除用 `buttons are-small`，状态提示用 `notification`。卡头保留了旧样式的视觉效果：渐变背景、标题前的青绿到金色装饰条（`card-header::before`）和标题后的渐变细线（`card-header::after`），都写在主题文件里。旧的 `style.css` 不再被页面加载，仅留在仓库里备用。
 
 编辑页地址是 `https://ai-auto-pages.github.io/edit.html`，不从主页链接过去。编辑页没有页头标题和说明，直接是卡片，布局紧凑。基本设置卡片只改标题；项目列表里每个项目都是单独一张卡片，没有项目编号标题，卡片里依次是名称、链接、价格、提示区，提示区下方有一个与主页详情区完全一致的预览框。常见问题在项目列表下方单独一节，每个问题也是一张卡片，依次是问题、回答，回答可填 HTML，下方有预览，卡片右上角有上移、下移、删除，新增常见问题按钮在该节下方。
 
