@@ -87,9 +87,28 @@ function collectFromForm(){
 function updatePreviewFor(el){
   el.querySelector('.preview').innerHTML = el.querySelector('.pTips').value || '';
 }
+function updateOrderPlaceholders(){
+  document.querySelectorAll('.product').forEach((el, idx) => {
+    const input = el.querySelector('.orderInput');
+    if (input && document.activeElement !== input) input.placeholder = String(idx + 1);
+  });
+}
 function refreshPreview(){
   try { $('jsonPreview').textContent = JSON.stringify(collectFromForm(), null, 2); } catch(e) {}
   document.querySelectorAll('.product').forEach(updatePreviewFor);
+  updateOrderPlaceholders();
+}
+function moveCardTo(card, targetIndex){
+  const list = $('productList');
+  const cards = Array.from(list.children);
+  const total = cards.length;
+  if (targetIndex < 0) targetIndex = 0;
+  if (targetIndex >= total) targetIndex = total - 1;
+  list.removeChild(card);
+  const remaining = Array.from(list.children);
+  if (targetIndex >= remaining.length) list.appendChild(card);
+  else list.insertBefore(card, remaining[targetIndex]);
+  refreshPreview();
 }
 document.addEventListener('input', e => { if (e.target.closest('.product') || e.target.id === 'fTitle') refreshPreview(); });
 function renderForm(){
@@ -102,7 +121,7 @@ function renderForm(){
     card.className = 'card product';
     card.innerHTML =
       '<div class="card-body">' +
-      '<div class="product-head"><button type="button" class="secondary upBtn">上移</button><button type="button" class="secondary downBtn">下移</button><button type="button" class="danger delBtn">删除</button></div>' +
+      '<div class="product-head"><span class="order-group"><input class="orderInput" type="number" min="1" inputmode="numeric" autocomplete="off"><button type="button" class="secondary orderBtn">确定</button></span><span class="tool-group"><button type="button" class="secondary upBtn">上移</button><button type="button" class="secondary downBtn">下移</button><button type="button" class="danger delBtn">删除</button></span></div>' +
       '<label>名称</label><input class="pName" type="text">' +
       '<label>链接</label><input class="pUrl" type="text" autocomplete="off">' +
       '<label>价格</label><input class="pPrice" type="number" step="any">' +
@@ -117,6 +136,17 @@ function renderForm(){
     card.querySelector('.delBtn').addEventListener('click', () => { if (confirm('确定删除这个项目吗？')) { card.remove(); refreshPreview(); } });
     card.querySelector('.upBtn').addEventListener('click', () => { const prev = card.previousElementSibling; if (prev) { list.insertBefore(card, prev); refreshPreview(); } });
     card.querySelector('.downBtn').addEventListener('click', () => { const next = card.nextElementSibling; if (next) { list.insertBefore(next, card); refreshPreview(); } });
+    const applyOrder = () => {
+      const total = list.children.length;
+      const raw = card.querySelector('.orderInput').value.trim();
+      const num = Number(raw);
+      if (!raw || !Number.isInteger(num) || num < 1 || num > total) { setStatus('请输入 1 到 ' + total + ' 之间的序号。', 'error'); card.querySelector('.orderInput').focus(); return; }
+      moveCardTo(card, num - 1);
+      card.querySelector('.orderInput').value = '';
+      setStatus('已排到第 ' + num + ' 位，点底部保存后才提交到仓库。', 'ok');
+    };
+    card.querySelector('.orderBtn').addEventListener('click', applyOrder);
+    card.querySelector('.orderInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); applyOrder(); } });
     list.appendChild(card);
   });
   refreshPreview();
@@ -130,7 +160,9 @@ async function loadFromPages(){
   setStatus('已加载当前 JSON。', 'ok');
 }
 $('addBtn').addEventListener('click', () => {
-  if (!data) data = { products: [] };
+  // 先以当前页面顺序为准，再追加，避免新增后重新渲染丢掉刚排好的顺序
+  const current = document.querySelectorAll('.product').length ? collectFromForm() : (data || { title: $('fTitle').value, products: [] });
+  data = current;
   if (!data.products) data.products = [];
   data.products.push({ name: '', url: '', price: 1, tips: '' });
   renderForm();
@@ -163,7 +195,7 @@ $('saveBtn').addEventListener('click', async () => {
     if (!putRes.ok) throw new Error('提交失败，HTTP ' + putRes.status + '：' + (putJson.message || '未知错误'));
     originalJsonText = JSON.stringify(newData, null, 2);
     data = newData;
-    setStatus('提交成功：' + (putJson.commit && putJson.commit.html_url ? putJson.commit.html_url : '请在仓库提交记录里查看'), 'ok');
+    setStatus('提交成功，顺序已保存到仓库。等 Pages 重新部署几分钟后，主页刷新才会显示新顺序：' + (putJson.commit && putJson.commit.html_url ? putJson.commit.html_url : '请在仓库提交记录里查看'), 'ok');
   } catch(e) {
     setStatus('提交失败：' + e.message, 'error');
   } finally { $('saveBtn').disabled = false; }
