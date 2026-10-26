@@ -21,13 +21,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>妖者发电站</title>
 <link rel="stylesheet" href="bulma.min.css">
-<link rel="stylesheet" href="bulma-theme.css?v=20261026-19">
+<link rel="stylesheet" href="bulma-theme.css?v=20261026-20">
 </head>
 <body>
-<div class="theme-switch" role="group" aria-label="主题">
-  <button type="button" data-theme-choice="light" title="浅色" aria-label="浅色主题">☀</button>
-  <button type="button" data-theme-choice="dark" title="深色" aria-label="深色主题">🌙</button>
-  <button type="button" data-theme-choice="system" title="跟随系统" aria-label="跟随系统主题">🌓</button>
+<div class="theme-switch">
+  <button type="button" class="theme-switch-toggle" aria-haspopup="true" aria-expanded="false" aria-label="切换主题" title="切换主题"><span class="theme-switch-icon">🌓</span><span class="theme-switch-caret">▾</span></button>
+  <div class="theme-switch-menu" role="menu" aria-label="主题">
+    <button type="button" role="menuitem" data-theme-choice="light"><span>☀</span><span>浅色</span><span class="theme-check">✓</span></button>
+    <button type="button" role="menuitem" data-theme-choice="dark"><span>🌙</span><span>深色</span><span class="theme-check">✓</span></button>
+    <button type="button" role="menuitem" data-theme-choice="system"><span>🌓</span><span>跟随系统</span><span class="theme-check">✓</span></button>
+  </div>
 </div>
 <section class="section site-section">
 <div class="site-container">
@@ -126,32 +129,54 @@ btn.addEventListener('click', () => {
 load();
 </script>
 <script>
-/* Theme switch: choice is stored (light / dark / system) and shared
-   by both pages via localStorage. System does not mean a CSS media
-   query: it means this script sets data-theme from matchMedia and
-   updates it when the system theme changes, so manual Light always
-   wins over a dark phone, and manual Dark always wins over a light
-   phone. The head script already set the first paint. */
+/* Theme switch: one button + dropdown. Choice is stored
+   (light / dark / system) and shared by both pages via
+   localStorage. System does not mean a CSS media query: it means
+   this script sets data-theme from matchMedia and updates it when
+   the system theme changes, so manual Light always wins over a
+   dark phone, and manual Dark always wins over a light phone.
+   The head script already set the first paint. Collapsed, the
+   toggle shows only the current theme's symbol; the dropdown
+   lists all three, the current one ticked. */
 (function () {
   var KEY = 'ai-auto-pages-theme';
+  var ICONS = { light: '☀', dark: '🌙', system: '🌓' };
+  var root = document.querySelector('.theme-switch');
+  if (!root) return;
+  var toggle = root.querySelector('.theme-switch-toggle');
+  var icon = root.querySelector('.theme-switch-icon');
+  var items = root.querySelectorAll('.theme-switch-menu button');
   var media = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
   function effective(choice) {
     if (choice === 'dark') return 'dark';
     if (choice === 'light') return 'light';
     return media && media.matches ? 'dark' : 'light';
   }
+  function closeMenu() {
+    root.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }
   function apply(choice) {
     try { localStorage.setItem(KEY, choice); } catch (e) {}
     document.documentElement.setAttribute('data-theme', effective(choice));
     document.documentElement.setAttribute('data-theme-choice', choice);
-    document.querySelectorAll('.theme-switch button').forEach(function (b) {
-      var on = b.getAttribute('data-theme-choice') === choice;
-      b.classList.toggle('is-active', on);
-      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    icon.textContent = ICONS[choice] || ICONS.system;
+    items.forEach(function (b) {
+      b.classList.toggle('is-active', b.getAttribute('data-theme-choice') === choice);
     });
   }
-  document.querySelectorAll('.theme-switch button').forEach(function (b) {
-    b.addEventListener('click', function () { apply(b.getAttribute('data-theme-choice')); });
+  toggle.addEventListener('click', function () {
+    var open = root.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  items.forEach(function (b) {
+    b.addEventListener('click', function () { apply(b.getAttribute('data-theme-choice')); closeMenu(); });
+  });
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.theme-switch')) closeMenu();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { closeMenu(); toggle.focus(); }
   });
   if (media && media.addEventListener) {
     media.addEventListener('change', function () {

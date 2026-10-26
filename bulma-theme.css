@@ -170,11 +170,17 @@
   width: 100%;
   max-width: 38rem;
   margin-inline: auto;
+  position: relative;
 }
 .edit-container {
   width: 100%;
   max-width: 47.5rem;
   margin-inline: auto;
+  position: relative;
+  /* Room for the theme button above the first card: the button is
+     absolutely positioned at the container's top-right, so without
+     this padding it would sit on top of the first card's header. */
+  padding-top: 44px;
 }
 .section {
   padding-top: 2rem;
@@ -735,52 +741,102 @@ details p {
   color: var(--bulma-text-weak);
 }
 
-/* ============ Theme switch: top-right, three symbols ============
-   One fixed control, three small buttons: ☀ light, 🌙 dark,
-   🌓 system (follow the device). Fixed, so it takes no layout
-   space and cannot break the homepage one-screen layout, and it
-   stays reachable while scrolling the edit page. Current choice
-   gets the teal active state; the other two stay quiet. Buttons
-   are 28px, total width about 94px, so on a phone it sits in the
-   top-right corner clear of the centred title. Choice is stored
-   in localStorage (key in the head script) and shared by both
-   pages; system mode is JS-driven (see the dark block comment),
-   not a CSS media query. */
+/* ============ Theme switch: one button + dropdown, inside the
+   content container ============
+   Why not fixed top-right of the screen: on a wide PC the screen
+   corner is hundreds of pixels away from the centred content
+   column, so the button looked detached. Now the button is
+   absolutely positioned at the top-right of .site-container /
+   .edit-container itself, so its right edge lines up with the
+   cards' right edge on every screen size. It takes no layout
+   space: on the homepage it sits beside the centred title (a
+   single 44px button cannot collide with it), and on the edit
+   page it sits in the container's 44px top padding above the
+   first card. Collapsed, the button shows only the current
+   theme's symbol plus a small ▾ to hint it opens; clicking opens
+   a dropdown with the three options, each symbol + text, the
+   current one ticked. Clicking outside, pressing Escape, or
+   choosing an option closes it. */
 .theme-switch {
-  position: fixed;
-  top: 10px;
-  right: 10px;
+  position: absolute;
+  top: 0;
+  right: 0;
   z-index: 40;
+}
+.theme-switch-toggle {
   display: flex;
-  gap: 2px;
-  padding: 2px;
-  background: var(--bulma-scheme-main-bis);
+  align-items: center;
+  gap: 3px;
+  height: 36px;
+  padding: 0 10px;
   border: 1px solid var(--bulma-border);
   border-radius: 9999px;
-  box-shadow: var(--bulma-shadow);
-}
-.theme-switch button {
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  border: none;
-  border-radius: 50%;
-  background: transparent;
-  color: var(--bulma-text-weak);
-  font-size: 15px;
-  line-height: 1;
-  cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
-}
-.theme-switch button:hover {
-  background: var(--bulma-scheme-main-ter);
+  background: var(--bulma-scheme-main-bis);
   color: var(--bulma-text);
+  box-shadow: var(--bulma-shadow);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
 }
-.theme-switch button.is-active {
-  background: var(--bulma-primary);
-  color: #fff;
+.theme-switch-toggle:hover {
+  background: var(--bulma-scheme-main-ter);
 }
-.theme-switch button:focus-visible {
+.theme-switch-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+.theme-switch-caret {
+  font-size: 9px;
+  line-height: 1;
+  color: var(--bulma-text-weak);
+}
+.theme-switch-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 128px;
+  padding: 4px;
+  background: var(--bulma-scheme-main-bis);
+  border: 1px solid var(--bulma-border);
+  border-radius: 12px;
+  box-shadow: var(--bulma-shadow);
+  z-index: 50;
+}
+.theme-switch.open .theme-switch-menu {
+  display: block;
+}
+.theme-switch-menu button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--bulma-text);
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+.theme-switch-menu button:hover {
+  background: var(--bulma-scheme-main-ter);
+}
+.theme-switch-menu button.is-active {
+  background: var(--bulma-primary-soft);
+  color: var(--bulma-primary);
+  font-weight: 700;
+}
+.theme-switch-menu .theme-check {
+  margin-left: auto;
+  font-size: 12px;
+  visibility: hidden;
+}
+.theme-switch-menu button.is-active .theme-check {
+  visibility: visible;
+}
+.theme-switch-toggle:focus-visible,
+.theme-switch-menu button:focus-visible {
   outline: 2px solid var(--bulma-primary);
   outline-offset: 2px;
 }
