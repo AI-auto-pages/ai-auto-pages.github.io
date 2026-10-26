@@ -427,27 +427,31 @@ summary::-webkit-details-marker {
   display: none;
 }
 summary::after {
-  content: "+";
+  content: "";
   flex: none;
   width: 28px;
   height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
   border-radius: 50%;
-  background: #fff;
+  background-color: #fff;
   border: 1px solid var(--bulma-border);
-  color: var(--bulma-text-weak);
-  font-size: 18px;
+  /* Plus icon, drawn, not typed: horizontal + vertical bars,
+     both centred in the circle. No font metrics involved. */
+  background-image:
+    linear-gradient(var(--bulma-text-weak), var(--bulma-text-weak)),
+    linear-gradient(var(--bulma-text-weak), var(--bulma-text-weak));
+  background-size: 12px 2px, 2px 12px;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 details[open] summary {
   background: #f0fdfa;
   color: var(--bulma-primary);
 }
 details[open] summary::after {
-  content: "−";
-  color: var(--bulma-primary);
+  /* Minus icon, drawn: horizontal bar only, same centre, same size. */
+  background-image:
+    linear-gradient(var(--bulma-primary), var(--bulma-primary));
+  background-size: 12px 2px;
   border-color: #99f6e4;
 }
 details > div,
@@ -456,6 +460,17 @@ details p {
   color: #55504a;
   font-size: 14px;
   line-height: 1.7;
+}
+
+/* FAQ card head: buttons are right-aligned via Bulma .buttons.is-right
+   (see edit.html), and the head gets the same bottom spacing as a
+   project card's .level head (1.5rem), so the first field sits at
+   the same distance in both card types. */
+.faq-head {
+  margin-bottom: 1.5rem;
+}
+.faq-head .buttons:last-child {
+  margin-bottom: 0;
 }
 
 /* ============ Notifications: soft tinted, not flat Bulma colour ============ */
