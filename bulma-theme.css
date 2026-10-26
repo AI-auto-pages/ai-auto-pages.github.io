@@ -14,51 +14,64 @@
    bar before the title (::before), and a fading gradient line after
    the title (::after). Everything else in this file is a fresh design. */
 
-:root {
+:root,
+[data-theme="light"] {
   /* --- Colour tokens (HSL, Bulma style) --- */
-  /* Primary: deep teal, the same family as the card-header accent. */
+  /* Primary: deep teal, the same family as the card-header accent.
+     Slightly desaturated vs Bulma default, so it reads calm, not neon. */
   --bulma-primary-h: 174;
-  --bulma-primary-s: 72%;
+  --bulma-primary-s: 65%;
   --bulma-primary-l: 27%;
-  /* Link: a touch darker than primary, for readable links on white. */
+  /* Link: a touch darker than primary, for readable links on paper. */
   --bulma-link-h: 174;
-  --bulma-link-s: 72%;
+  --bulma-link-s: 65%;
   --bulma-link-l: 24%;
   /* Info: calm slate-blue, not Bulma's default bright blue. */
   --bulma-info-h: 210;
-  --bulma-info-s: 32%;
+  --bulma-info-s: 30%;
   --bulma-info-l: 48%;
   /* Success: soft leaf green, close to teal so it sits with primary. */
   --bulma-success-h: 158;
-  --bulma-success-s: 52%;
+  --bulma-success-s: 45%;
   --bulma-success-l: 38%;
   /* Warning / gold accent: kept for the card-header bar and warnings. */
   --bulma-warning-h: 32;
-  --bulma-warning-s: 95%;
+  --bulma-warning-s: 85%;
   --bulma-warning-l: 44%;
   /* Danger: softer, less harsh red than Bulma default. */
   --bulma-danger-h: 357;
-  --bulma-danger-s: 62%;
-  --bulma-danger-l: 50%;
+  --bulma-danger-s: 55%;
+  --bulma-danger-l: 48%;
 
-  /* --- Scheme: warm paper, not stark white, not grey --- */
-  --bulma-scheme-main: #faf9f6;
-  --bulma-scheme-main-bis: #ffffff;
-  --bulma-scheme-main-ter: #f3f1ec;
-  --bulma-background: #f3f1ec;
-  --bulma-text: #211d19;
-  --bulma-text-strong: #14110e;
-  --bulma-text-weak: #6e675f;
+  /* --- Scheme: soft warm paper, not stark white, not grey ---
+     Page #f3f0e9, cards #fdfbf6 (warm off-white, never pure #fff),
+     text #3a352e (soft charcoal-brown, never pure black). Contrast
+     is kept for readability, but nothing is pure black on pure white,
+     so it reads soft and fresh rather than harsh. */
+  --bulma-scheme-main: #f3f0e9;
+  --bulma-scheme-main-bis: #fdfbf6;
+  --bulma-scheme-main-ter: #ece8dd;
+  --bulma-background: #f3f0e9;
+  --bulma-text: #3a352e;
+  --bulma-text-strong: #2b2620;
+  --bulma-text-weak: #7d766a;
   /* Primary button text: Bulma defaults invert to the darkest shade,
      which is dark text on dark teal. Force the light shade so primary
-     buttons read white on teal. Dark mode overrides this back below. */
+     buttons read white on teal. */
   --bulma-primary-invert-l: 96%;
   /* Inline links: Bulma's link-on-scheme is a bright mid-teal.
      Force the dark teal so links are readable on paper / light boxes. */
   --bulma-link-on-scheme-l: 27%;
-  --bulma-text-title: #14110e;
-  --bulma-border: #e9e5de;
-  --bulma-border-weak: #efece6;
+  --bulma-text-title: #2b2620;
+  --bulma-border: #e2dccf;
+  --bulma-border-weak: #ebe7db;
+
+  /* Custom tokens for boxes that Bulma does not theme by itself.
+     Defined here (light) and again in the dark block, so every
+     custom box switches with the theme instead of staying light. */
+  --theme-text-soft: #5c554b;
+  --theme-link: #0f766e;
+  --theme-link-soft: #e6f4f1;
 
   /* --- Shape: modern, but not bubbly --- */
   --bulma-radius: 10px;
@@ -67,9 +80,9 @@
   --bulma-radius-rounded: 9999px;
 
   /* --- Depth: one layered soft shadow, used by cards and boxes --- */
-  --bulma-shadow: 0 1px 2px rgba(33, 29, 25, 0.05), 0 12px 32px rgba(33, 29, 25, 0.08);
-  --bulma-card-shadow: 0 1px 2px rgba(33, 29, 25, 0.05), 0 12px 32px rgba(33, 29, 25, 0.08);
-  --bulma-box-shadow: 0 1px 2px rgba(33, 29, 25, 0.05), 0 12px 32px rgba(33, 29, 25, 0.08);
+  --bulma-shadow: 0 1px 2px rgba(60, 50, 35, 0.04), 0 12px 32px rgba(60, 50, 35, 0.07);
+  --bulma-card-shadow: 0 1px 2px rgba(60, 50, 35, 0.04), 0 12px 32px rgba(60, 50, 35, 0.07);
+  --bulma-box-shadow: 0 1px 2px rgba(60, 50, 35, 0.04), 0 12px 32px rgba(60, 50, 35, 0.07);
 
   /* --- Type scale: a little larger, a little tighter --- */
   --bulma-size-normal: 15px;
@@ -85,39 +98,61 @@
   --bulma-button-weight: 600;
 }
 
-/* Dark theme, same tokens, inverted scheme. Bulma applies this when
-   <html data-theme="dark">, and the @media block at the end covers
-   system dark mode for the custom (non-Bulma) boxes. */
+/* Dark theme: eye-protecting, soft, never harsh.
+   Root cause of the mobile bug this replaces: the old file only
+   darkened a few custom boxes under
+   `@media (prefers-color-scheme: dark)`, while text stayed on the
+   light :root tokens (Bulma dark only applies under
+   [data-theme="dark"], which nothing ever set). Result: dark cards
+   with dark text, unreadable. That media block is deleted below.
+   Now theme is chosen in JS (see the head script in index.html /
+   edit.html): light / dark / system. System means JS sets
+   data-theme to dark or light from matchMedia and listens for
+   changes, so this [data-theme="dark"] block is the single source
+   for dark, in every case. Never re-add a prefers-color-scheme
+   media block that darkens surfaces on its own, or manual Light
+   on a dark phone will break again.
+   Palette: warm dark brown, never pure black; text warm off-white,
+   never pure white; colours desaturated and lightened just enough
+   to read on dark, never neon. */
 [data-theme="dark"] {
-  --bulma-primary-invert-l: 6%;
-  --bulma-link-on-scheme-l: 68%;
-  --bulma-primary-h: 171;
-  --bulma-primary-s: 72%;
-  --bulma-primary-l: 62%;
-  --bulma-link-h: 171;
-  --bulma-link-s: 72%;
-  --bulma-link-l: 62%;
+  --bulma-primary-h: 174;
+  --bulma-primary-s: 50%;
+  --bulma-primary-l: 42%;
+  --bulma-link-h: 174;
+  --bulma-link-s: 45%;
+  --bulma-link-l: 65%;
   --bulma-info-h: 210;
-  --bulma-info-s: 35%;
-  --bulma-info-l: 68%;
+  --bulma-info-s: 30%;
+  --bulma-info-l: 65%;
   --bulma-success-h: 158;
-  --bulma-success-s: 55%;
-  --bulma-success-l: 58%;
+  --bulma-success-s: 40%;
+  --bulma-success-l: 55%;
   --bulma-warning-h: 38;
-  --bulma-warning-s: 95%;
-  --bulma-warning-l: 58%;
-  --bulma-scheme-main: #171412;
-  --bulma-scheme-main-bis: #211d19;
-  --bulma-scheme-main-ter: #2a2521;
-  --bulma-background: #171412;
-  --bulma-text: #f5f2ec;
-  --bulma-text-strong: #fffdf8;
-  --bulma-text-weak: #a89f94;
-  --bulma-border: #332e28;
-  --bulma-border-weak: #2a2521;
-  --bulma-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.4);
-  --bulma-card-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.4);
-  --bulma-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.4);
+  --bulma-warning-s: 70%;
+  --bulma-warning-l: 60%;
+  --bulma-danger-h: 357;
+  --bulma-danger-s: 50%;
+  --bulma-danger-l: 62%;
+  --bulma-scheme-main: #201d1a;
+  --bulma-scheme-main-bis: #2b2723;
+  --bulma-scheme-main-ter: #35302a;
+  --bulma-background: #201d1a;
+  --bulma-text: #e6dfd2;
+  --bulma-text-strong: #f3eee3;
+  --bulma-text-weak: #a89f8d;
+  --bulma-primary-invert-l: 96%;
+  --bulma-link-on-scheme-l: 70%;
+  --bulma-text-title: #f3eee3;
+  --bulma-border: #403a30;
+  --bulma-border-weak: #352f27;
+  --theme-text-soft: #d0c8b8;
+  --theme-link: #8ad8cc;
+  --theme-link-soft: #1f3d3a;
+  --bulma-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 12px 32px rgba(0, 0, 0, 0.35);
+  --bulma-card-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 12px 32px rgba(0, 0, 0, 0.35);
+  --bulma-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 12px 32px rgba(0, 0, 0, 0.35);
+  --bulma-input-focus-border-l: 65%;
 }
 
 /* ============ Layout: fluid width, centred, not a fixed pixel width ============
@@ -183,7 +218,7 @@
 
 /* ============ Cards: white, soft border, layered shadow ============ */
 .card {
-  background: #fff;
+  background: var(--bulma-scheme-main-bis);
   border: 1px solid var(--bulma-border);
   border-radius: var(--bulma-radius-large);
   overflow: hidden;
@@ -265,9 +300,9 @@
 .button.is-primary:disabled {
   /* Readable muted disabled, not pale teal with faint text. */
   opacity: 1;
-  background: #e2e8e6;
-  border-color: #e2e8e6;
-  color: #5f6b68;
+  background: var(--bulma-scheme-main-ter);
+  border-color: var(--bulma-border);
+  color: var(--bulma-text-weak);
   box-shadow: none;
   transform: none;
 }
@@ -287,8 +322,8 @@
 .buttons.are-small .button:not(:disabled):hover {
   transform: none;
   box-shadow: none;
-  background: #f8f7f4;
-  border-color: #d9d4cb;
+  background: var(--bulma-scheme-main-ter);
+  border-color: var(--bulma-border);
 }
 /* Add buttons: tinted, so they are not lost in the long list. */
 #addBtn,
@@ -328,13 +363,13 @@ a:focus-visible,
 }
 .input::placeholder,
 .textarea::placeholder {
-  color: #8a837b;
+  color: var(--bulma-text-weak);
   opacity: 1;
 }
 .order-control .input::placeholder {
   /* Order placeholder is the current position, not an empty hint:
      make it darker so it is not mistaken for a faint placeholder. */
-  color: #6e675f;
+  color: var(--bulma-text);
 }
 .input[type="number"]::-webkit-outer-spin-button,
 .input[type="number"]::-webkit-inner-spin-button {
@@ -348,8 +383,8 @@ a:focus-visible,
 .input,
 .textarea,
 .select select {
-  background: #fff;
-  border-color: #e7e3db;
+  background: var(--bulma-scheme-main-bis);
+  border-color: var(--bulma-border);
   border-radius: var(--bulma-control-radius);
   box-shadow: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -378,8 +413,8 @@ a:focus-visible,
   display: none;
   margin-top: 14px;
   padding: 14px 16px;
-  background: #f8faf8;
-  border: 1px solid #e6e9e4;
+  background: var(--bulma-scheme-main-ter);
+  border: 1px solid var(--bulma-border);
   border-left: 3px solid var(--bulma-primary);
   border-radius: 10px;
   max-height: 210px;
@@ -406,7 +441,7 @@ a:focus-visible,
 .detail a,
 .preview a {
   font-weight: 600;
-  color: #0f766e;
+  color: var(--theme-link);
   overflow-wrap: anywhere;
 }
 .detail a:hover,
@@ -427,13 +462,13 @@ summary {
   justify-content: space-between;
   gap: 12px;
   padding: 10px 12px;
-  background: #f8f7f4;
+  background: var(--bulma-scheme-main-ter);
   border: 1px solid var(--bulma-border-weak);
   border-radius: 10px;
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 summary:hover {
-  background: #f0fdfa;
+  background: var(--bulma-primary-soft);
 }
 summary::-webkit-details-marker {
   display: none;
@@ -444,7 +479,7 @@ summary::after {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background-color: #fff;
+  background-color: var(--bulma-scheme-main-bis);
   border: 1px solid var(--bulma-border);
   /* Plus icon, drawn, not typed: horizontal + vertical bars,
      both centred in the circle. No font metrics involved. */
@@ -456,7 +491,7 @@ summary::after {
   background-repeat: no-repeat;
 }
 details[open] summary {
-  background: #f0fdfa;
+  background: var(--bulma-primary-soft);
   color: var(--bulma-primary);
 }
 details[open] summary::after {
@@ -469,7 +504,7 @@ details[open] summary::after {
 details > div,
 details p {
   margin: 12px 4px 2px;
-  color: #55504a;
+  color: var(--theme-text-soft);
   font-size: 14px;
   line-height: 1.7;
 }
@@ -521,7 +556,7 @@ details p {
   /* Gap from the summary above: it was margin:0, so the pre block
      touched the summary pill. 16px matches the card padding rhythm. */
   margin: 16px 0 0;
-  background: #faf9f6;
+  background: var(--bulma-scheme-main-ter);
   border: 1px solid var(--bulma-border-weak);
   border-radius: 10px;
   padding: 12px 14px;
@@ -536,7 +571,7 @@ details p {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(255, 255, 255, 0.97);
+  background: var(--bulma-scheme-main-bis);
   border-top: 1px solid var(--bulma-border);
   box-shadow: 0 -8px 24px rgba(33, 29, 25, 0.08);
   padding: 14px 16px;
@@ -667,8 +702,8 @@ details p {
 .field.has-addons .button:not(:disabled):active {
   box-shadow: none !important;
   transform: none !important;
-  background: #f8f7f4;
-  border-color: #d9d4cb;
+  background: var(--bulma-scheme-main-ter);
+  border-color: var(--bulma-border);
 }
 /* Primary button inside has-addons (savebar): same flat/no-shadow
    rule, but keep primary teal + white text, hover dark teal only. */
@@ -700,44 +735,119 @@ details p {
   color: var(--bulma-text-weak);
 }
 
-/* ============ Dark mode for custom boxes (system dark, no data-theme) ============ */
-@media (prefers-color-scheme: dark) {
-  .card {
-    background: #211d19;
-  }
-  .detail,
-  .preview {
-    background: #2a2521;
-    border-color: #332e28;
-  }
-  summary {
-    background: #2a2521;
-    border-color: #332e28;
-  }
-  summary:hover,
-  details[open] summary {
-    background: #134e4a;
-  }
-  .input,
-  .textarea,
-  .select select {
-    background: #211d19;
-    border-color: #332e28;
-  }
-  .edit .json-preview {
-    background: #171412;
-  }
-  .savebar {
-    background: rgba(33, 29, 25, 0.97);
-  }
-  .notification.is-success {
-    background: #064e3b;
-    color: #d1fae5;
-    border-color: #065f46;
-  }
-  .notification.is-danger {
-    background: #450a0a;
-    color: #fecaca;
-    border-color: #7f1d1d;
-  }
+/* ============ Theme switch: top-right, three symbols ============
+   One fixed control, three small buttons: ☀ light, 🌙 dark,
+   🌓 system (follow the device). Fixed, so it takes no layout
+   space and cannot break the homepage one-screen layout, and it
+   stays reachable while scrolling the edit page. Current choice
+   gets the teal active state; the other two stay quiet. Buttons
+   are 28px, total width about 94px, so on a phone it sits in the
+   top-right corner clear of the centred title. Choice is stored
+   in localStorage (key in the head script) and shared by both
+   pages; system mode is JS-driven (see the dark block comment),
+   not a CSS media query. */
+.theme-switch {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 40;
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  background: var(--bulma-scheme-main-bis);
+  border: 1px solid var(--bulma-border);
+  border-radius: 9999px;
+  box-shadow: var(--bulma-shadow);
+}
+.theme-switch button {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--bulma-text-weak);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.theme-switch button:hover {
+  background: var(--bulma-scheme-main-ter);
+  color: var(--bulma-text);
+}
+.theme-switch button.is-active {
+  background: var(--bulma-primary);
+  color: #fff;
+}
+.theme-switch button:focus-visible {
+  outline: 2px solid var(--bulma-primary);
+  outline-offset: 2px;
+}
+
+/* ============ Dark overrides for the few remaining light tints ============
+   Everything that uses Bulma / scheme variables above already
+   switches with [data-theme="dark"]. These are the hardcoded light
+   tints left in the light rules (danger hover, add buttons, card
+   accents, focus ring, notifications, tool delete hover), each
+   given a soft dark equivalent. No prefers-color-scheme block here:
+   see the dark block comment at the top of this file. */
+[data-theme="dark"] .card-header {
+  background: linear-gradient(90deg, rgba(45, 212, 191, 0.14), rgba(45, 212, 191, 0) 72%);
+}
+[data-theme="dark"] .card-header::before {
+  background: linear-gradient(180deg, #2dd4bf, #e5a83b);
+}
+[data-theme="dark"] .site-container > .title::after {
+  background: linear-gradient(90deg, #2dd4bf, #e5a83b);
+}
+[data-theme="dark"] details[open] summary {
+  color: var(--theme-link);
+}
+[data-theme="dark"] details[open] summary::after {
+  border-color: #2a5a55;
+}
+[data-theme="dark"] .button.is-danger.is-outlined:hover,
+[data-theme="dark"] .buttons.are-small .button.is-danger.is-outlined:hover {
+  background: #3a2323;
+  border-color: #7a3a3a;
+  color: #f0a0a0;
+}
+[data-theme="dark"] .tool-addons .button.is-danger.is-outlined:not(:disabled):hover,
+[data-theme="dark"] .tool-addons .button.is-danger.is-outlined:not(:disabled):active,
+[data-theme="dark"] .tool-addons .button.is-danger.is-outlined:not(:disabled):focus {
+  background: #3a2323 !important;
+  border-color: var(--bulma-danger) !important;
+  color: var(--bulma-danger) !important;
+}
+[data-theme="dark"] #addBtn,
+[data-theme="dark"] #addFaqBtn {
+  background: #1f3d3a;
+  border-color: #2a5a55;
+  color: #8ad8cc;
+}
+[data-theme="dark"] #addBtn:hover,
+[data-theme="dark"] #addFaqBtn:hover {
+  background: #234e4a;
+  border-color: #35706a;
+}
+[data-theme="dark"] .input:focus,
+[data-theme="dark"] .textarea:focus,
+[data-theme="dark"] .select select:focus,
+[data-theme="dark"] .input:focus-visible,
+[data-theme="dark"] .textarea:focus-visible {
+  box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.25);
+}
+[data-theme="dark"] .notification.is-success {
+  background: #1f2e28;
+  color: #c8e6d5;
+  border-color: #2f4a3d;
+}
+[data-theme="dark"] .notification.is-danger {
+  background: #2e1f1f;
+  color: #f3c6c6;
+  border-color: #4a2a2a;
+}
+[data-theme="dark"] .savebar {
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.35);
 }

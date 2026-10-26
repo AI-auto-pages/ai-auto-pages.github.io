@@ -2,12 +2,33 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
+<script>
+/* Theme before first paint: read the stored choice (light / dark /
+   system, default system), and set data-theme on <html> so Bulma
+   and bulma-theme.css paint the right theme immediately, with no
+   light flash on a dark phone. System means: follow matchMedia,
+   and the main script below listens for system changes. */
+(function () {
+  try {
+    var choice = localStorage.getItem('ai-auto-pages-theme') || 'system';
+    var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var effective = choice === 'dark' ? 'dark' : choice === 'light' ? 'light' : (dark ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', effective);
+    document.documentElement.setAttribute('data-theme-choice', choice);
+  } catch (e) {}
+})();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>妖者发电站</title>
 <link rel="stylesheet" href="bulma.min.css">
-<link rel="stylesheet" href="bulma-theme.css?v=20261026-18">
+<link rel="stylesheet" href="bulma-theme.css?v=20261026-19">
 </head>
 <body>
+<div class="theme-switch" role="group" aria-label="主题">
+  <button type="button" data-theme-choice="light" title="浅色" aria-label="浅色主题">☀</button>
+  <button type="button" data-theme-choice="dark" title="深色" aria-label="深色主题">🌙</button>
+  <button type="button" data-theme-choice="system" title="跟随系统" aria-label="跟随系统主题">🌓</button>
+</div>
 <section class="section site-section">
 <div class="site-container">
   <h1 id="siteTitle" class="title has-text-centered">妖者发电站</h1>
@@ -103,6 +124,43 @@ btn.addEventListener('click', () => {
   if (target) window.open(target, '_blank');
 });
 load();
+</script>
+<script>
+/* Theme switch: choice is stored (light / dark / system) and shared
+   by both pages via localStorage. System does not mean a CSS media
+   query: it means this script sets data-theme from matchMedia and
+   updates it when the system theme changes, so manual Light always
+   wins over a dark phone, and manual Dark always wins over a light
+   phone. The head script already set the first paint. */
+(function () {
+  var KEY = 'ai-auto-pages-theme';
+  var media = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+  function effective(choice) {
+    if (choice === 'dark') return 'dark';
+    if (choice === 'light') return 'light';
+    return media && media.matches ? 'dark' : 'light';
+  }
+  function apply(choice) {
+    try { localStorage.setItem(KEY, choice); } catch (e) {}
+    document.documentElement.setAttribute('data-theme', effective(choice));
+    document.documentElement.setAttribute('data-theme-choice', choice);
+    document.querySelectorAll('.theme-switch button').forEach(function (b) {
+      var on = b.getAttribute('data-theme-choice') === choice;
+      b.classList.toggle('is-active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+  document.querySelectorAll('.theme-switch button').forEach(function (b) {
+    b.addEventListener('click', function () { apply(b.getAttribute('data-theme-choice')); });
+  });
+  if (media && media.addEventListener) {
+    media.addEventListener('change', function () {
+      var choice = document.documentElement.getAttribute('data-theme-choice') || 'system';
+      if (choice === 'system') apply('system');
+    });
+  }
+  try { apply(localStorage.getItem(KEY) || 'system'); } catch (e) { apply('system'); }
+})();
 </script>
 </body>
 </html>

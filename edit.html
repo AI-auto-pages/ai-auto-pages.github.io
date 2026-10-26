@@ -2,13 +2,34 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
+<script>
+/* Theme before first paint: read the stored choice (light / dark /
+   system, default system), and set data-theme on <html> so Bulma
+   and bulma-theme.css paint the right theme immediately, with no
+   light flash on a dark phone. System means: follow matchMedia,
+   and the main script below listens for system changes. */
+(function () {
+  try {
+    var choice = localStorage.getItem('ai-auto-pages-theme') || 'system';
+    var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var effective = choice === 'dark' ? 'dark' : choice === 'light' ? 'light' : (dark ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', effective);
+    document.documentElement.setAttribute('data-theme-choice', choice);
+  } catch (e) {}
+})();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>编辑</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="stylesheet" href="bulma.min.css">
-<link rel="stylesheet" href="bulma-theme.css?v=20261026-18">
+<link rel="stylesheet" href="bulma-theme.css?v=20261026-19">
 </head>
 <body class="edit">
+<div class="theme-switch" role="group" aria-label="主题">
+  <button type="button" data-theme-choice="light" title="浅色" aria-label="浅色主题">☀</button>
+  <button type="button" data-theme-choice="dark" title="深色" aria-label="深色主题">🌙</button>
+  <button type="button" data-theme-choice="system" title="跟随系统" aria-label="跟随系统主题">🌓</button>
+</div>
 <section class="section edit-section">
 <div class="edit-container">
   <div class="card mb-4">
@@ -255,6 +276,41 @@ $('saveBtn').addEventListener('click', async () => {
   } finally { $('saveBtn').disabled = false; }
 });
 loadFromPages().catch(e => setStatus('加载失败：' + e.message, 'error'));
+</script>
+<script>
+/* Theme switch: same logic as the homepage (see index.html).
+   Choice stored in localStorage, shared by both pages. System is
+   JS-driven from matchMedia, not a CSS media query, so manual
+   Light / Dark always wins over the device theme. */
+(function () {
+  var KEY = 'ai-auto-pages-theme';
+  var media = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+  function effective(choice) {
+    if (choice === 'dark') return 'dark';
+    if (choice === 'light') return 'light';
+    return media && media.matches ? 'dark' : 'light';
+  }
+  function apply(choice) {
+    try { localStorage.setItem(KEY, choice); } catch (e) {}
+    document.documentElement.setAttribute('data-theme', effective(choice));
+    document.documentElement.setAttribute('data-theme-choice', choice);
+    document.querySelectorAll('.theme-switch button').forEach(function (b) {
+      var on = b.getAttribute('data-theme-choice') === choice;
+      b.classList.toggle('is-active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+  document.querySelectorAll('.theme-switch button').forEach(function (b) {
+    b.addEventListener('click', function () { apply(b.getAttribute('data-theme-choice')); });
+  });
+  if (media && media.addEventListener) {
+    media.addEventListener('change', function () {
+      var choice = document.documentElement.getAttribute('data-theme-choice') || 'system';
+      if (choice === 'system') apply('system');
+    });
+  }
+  try { apply(localStorage.getItem(KEY) || 'system'); } catch (e) { apply('system'); }
+})();
 </script>
 </body>
 </html>
