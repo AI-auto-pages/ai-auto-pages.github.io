@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>妖者发电站</title>
-<link rel="stylesheet" href="style.css?v=20261026-6">
+<link rel="stylesheet" href="style.css?v=20261026-7">
 </head>
 <body>
 <main class="wrap">
@@ -32,13 +32,10 @@
     </div>
   </section>
 
-  <section class="card">
+  <section class="card" id="faqSection">
     <div class="card-head"><h2>常见问题</h2></div>
     <div class="card-body">
-      <details>
-        <summary>蓝奏云打不开？</summary>
-        <p>把链接里的蓝奏云域名换成你能访问的域名再打开，也可以通过搜索找到当前可用的蓝奏云域名。</p>
-      </details>
+      <div id="faqList"></div>
     </div>
   </section>
 
@@ -59,6 +56,25 @@ async function load(){
     if (data.title) { document.getElementById('siteTitle').textContent = data.title; document.title = data.title; }
     products = data.products || [];
     select.innerHTML = '<option value="">请选择</option>' + products.map((p, i) => '<option value="' + i + '">' + p.name + '</option>').join('');
+    const faqs = data.faqs || [];
+    const faqList = document.getElementById('faqList');
+    const faqSection = document.getElementById('faqSection');
+    if (!faqs.length) { faqSection.style.display = 'none'; }
+    else {
+      faqSection.style.display = '';
+      faqList.innerHTML = '';
+      faqs.forEach(f => {
+        const question = f['问题'] || f.question || '';
+        const answer = f['回答'] || f.answer || '';
+        if (!question && !answer) return;
+        const d = document.createElement('details');
+        const s = document.createElement('summary');
+        s.textContent = question;
+        const a = document.createElement('div');
+        a.innerHTML = answer;
+        d.appendChild(s); d.appendChild(a); faqList.appendChild(d);
+      });
+    }
   } catch (e) {
     select.innerHTML = '<option value="">数据加载失败，请刷新重试</option>';
   }

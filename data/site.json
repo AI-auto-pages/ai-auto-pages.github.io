@@ -115,5 +115,11 @@
       "price": 5,
       "tips": "<h1 class=\"has-text-danger\" style=\"\n    font-size: 1.4rem;\n\">↓↓↓修改【购买数量】调整打赏金额↓↓↓</h1>"
     }
+  ],
+  "faqs": [
+    {
+      "问题": "蓝奏云打不开？",
+      "回答": "<p>可以把蓝奏云域名换成你能访问的。</p><p>比如你可以访问 wwf.lanzov.com，那就把链接换成 wwf.lanzov.com/xxx。</p><p>可以百度谷歌搜【蓝奏云】找到你能访问的域名。</p>"
+    }
   ]
 }

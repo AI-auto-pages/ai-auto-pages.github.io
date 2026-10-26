@@ -75,6 +75,10 @@ footer{text-align:center;color:var(--muted);font-size:12px;line-height:1.6;paddi
 .edit .order-group:focus-within button{border-color:#0070f3 !important}
 .edit .tool-group{display:flex;gap:4px;flex:0 0 auto;flex-wrap:nowrap}
 .edit .tool-group button{width:auto !important;min-height:0;padding:5px 8px;font-size:13px;font-weight:600;flex:0 0 auto;white-space:nowrap}
+.edit .section-title{font-size:16px;font-weight:700;margin:20px 0 4px}
+.edit .faq{margin-top:12px}
+.edit .faq-head{display:flex;justify-content:flex-end;gap:4px;flex-wrap:nowrap}
+.edit .faq-head button{width:auto !important;min-height:0;padding:5px 8px;font-size:13px;font-weight:600;flex:0 0 auto;white-space:nowrap}
 .edit .json-preview{white-space:pre-wrap;word-break:break-all;font-size:12px;max-height:320px;overflow:auto;margin:0}
 .edit .preview-label{font-size:13px;color:var(--muted);margin:12px 0 6px}
 /* 编辑页提示区预览：与主页详情区完全一致 */
