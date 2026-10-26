@@ -65,9 +65,11 @@ footer{text-align:center;color:var(--muted);font-size:12px;line-height:1.6;paddi
 .edit .product .card-body{padding:14px 16px}
 .edit .product-head{display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:nowrap}
 .edit .product-head button{width:auto !important;min-height:0;padding:5px 8px;font-size:13px;font-weight:600;flex:0 0 auto;white-space:nowrap}
-.edit .order-group{display:flex;gap:4px;align-items:center;flex:0 0 auto;flex-wrap:nowrap}
-.edit .order-group button{width:auto !important;min-height:0;padding:5px 8px;font-size:13px;font-weight:600;flex:0 0 auto;white-space:nowrap}
-.edit .order-input{width:58px !important;min-width:58px !important;max-width:58px !important;flex:0 0 58px !important;padding:5px 6px !important;font-size:13px;text-align:center}
+.edit .order-group{display:inline-flex;gap:0;align-items:stretch;flex:0 0 auto;flex-wrap:nowrap;height:32px;border:1px solid #d8dee6;border-radius:8px;overflow:hidden;background:#fff}
+.edit .order-group:focus-within{border-color:#0070f3;box-shadow:0 0 0 3px rgba(0,112,243,0.15)}
+.edit .order-group button{width:auto !important;min-height:0;height:100% !important;padding:0 10px !important;font-size:13px;font-weight:600;flex:0 0 auto;white-space:nowrap;border:none !important;border-left:1px solid #d8dee6 !important;border-radius:0 !important;background:#f6f8fa !important;box-shadow:none !important;display:flex;align-items:center}
+.edit .order-input{width:58px !important;min-width:58px !important;max-width:58px !important;flex:0 0 58px !important;height:100% !important;padding:0 6px !important;font-size:13px;text-align:center;border:none !important;border-radius:0 !important;box-shadow:none !important;background:transparent}
+.edit .order-input:focus{border:none !important;box-shadow:none !important;outline:none}
 .edit .tool-group{display:flex;gap:4px;flex:0 0 auto;flex-wrap:nowrap}
 .edit .tool-group button{width:auto !important;min-height:0;padding:5px 8px;font-size:13px;font-weight:600;flex:0 0 auto;white-space:nowrap}
 .edit .json-preview{white-space:pre-wrap;word-break:break-all;font-size:12px;max-height:320px;overflow:auto;margin:0}
