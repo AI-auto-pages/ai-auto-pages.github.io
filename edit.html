@@ -12,7 +12,7 @@
   <section class="card">
     <div class="card-head"><h2>基本设置</h2></div>
     <div class="card-body">
-      <label for="fTitle">标题</label>
+      <label for="fTitle">页面标题</label>
       <input id="fTitle" type="text">
     </div>
   </section>
@@ -26,10 +26,15 @@
 
   <div id="status" class="status">正在加载当前 JSON……</div>
 
-  <details style="margin-top:14px">
-    <summary style="cursor:pointer;font-weight:650">JSON</summary>
-    <pre id="jsonPreview" style="white-space:pre-wrap;word-break:break-all;font-size:12px;max-height:320px;overflow:auto"></pre>
-  </details>
+  <section class="card">
+    <div class="card-head"><h2>JSON 预览</h2></div>
+    <div class="card-body">
+      <details>
+        <summary style="cursor:pointer;font-weight:650">查看当前 JSON（只读预览）</summary>
+        <pre id="jsonPreview" class="json-preview"></pre>
+      </details>
+    </div>
+  </section>
 </main>
 
 <div class="savebar"><div class="savebar-inner">
