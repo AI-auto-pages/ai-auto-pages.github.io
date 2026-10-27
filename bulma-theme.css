@@ -155,27 +155,19 @@
   --bulma-input-focus-border-l: 65%;
 }
 
-/* ============ Layout: fluid width, centred, not a fixed pixel width ============
-   Previous version used max-width:620px/760px !important to beat
-   Bulma's wide container (960-1344px). That read as a fixed width.
-   Now the Bulma .container class is dropped from the HTML, so there
-   is no wide container to beat and no !important is needed.
-   Width is fluid: 100% of the section on narrow screens (so mobile
-   fills the available width, with the section's own side padding),
-   capped by a rem cap on wide screens (38rem ~ 608px homepage,
-   47.5rem ~ 760px edit, at 16px root, scaling with root font size),
-   and centred by margin-inline:auto, like the reference page:
-   centred, limited on desktop, full on mobile. */
+/* ============ Layout: Bulma container width, centred, not a custom fixed width ============
+   Width is NOT set here any more. The HTML uses Bulma's own
+   .container.is-max-tablet (705px in the bundled Bulma 1.0.4, full
+   width below the desktop breakpoint, centred on desktop and up),
+   so the content column is centred and not too wide without a
+   hard-coded pixel/rem cap in this file. .site-container /
+   .edit-container below are only hooks for positioning (the theme
+   switch is absolutely positioned at the container's top-right)
+   and for the homepage flex layout; they set no width. */
 .site-container {
-  width: 100%;
-  max-width: 38rem;
-  margin-inline: auto;
   position: relative;
 }
 .edit-container {
-  width: 100%;
-  max-width: 47.5rem;
-  margin-inline: auto;
   position: relative;
   /* Room for the theme button above the first card: the button is
      absolutely positioned at the container's top-right, so without
@@ -183,8 +175,8 @@
   padding-top: 44px;
 }
 .section {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
 }
 @media (min-width: 768px) {
   .site-section {
@@ -209,7 +201,7 @@
 .site-container > .title {
   font-size: 30px;
   letter-spacing: 0.04em;
-  margin-bottom: 1.6rem;
+  margin-bottom: 1.25rem;
   color: var(--bulma-text-strong);
 }
 .site-container > .title::after {
@@ -304,13 +296,16 @@
   transform: translateY(-1px);
 }
 .button.is-primary:disabled {
-  /* Readable muted disabled, not pale teal with faint text. */
-  opacity: 1;
-  background: var(--bulma-scheme-main-ter);
-  border-color: var(--bulma-border);
-  color: var(--bulma-text-weak);
-  box-shadow: none;
-  transform: none;
+  /* Readable muted disabled, not pale teal with faint text.
+     Every property needs !important here: .button.is-primary
+     sets white text with !important, which otherwise wins over
+     this rule and leaves white text on a pale background. */
+  opacity: 1 !important;
+  background: var(--bulma-scheme-main-ter) !important;
+  border-color: var(--bulma-border) !important;
+  color: var(--bulma-text-weak) !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 .button.is-danger.is-outlined:hover {
   background: #fef2f2;
@@ -417,6 +412,10 @@ a:focus-visible,
 .detail,
 .preview {
   display: none;
+  /* Keep CJK words together (e.g. “密码” must not split across
+     lines) while long Latin URLs inside <a> may still break. */
+  word-break: keep-all;
+  overflow-wrap: break-word;
   margin-top: 14px;
   padding: 14px 16px;
   background: var(--bulma-scheme-main-ter);
@@ -442,7 +441,7 @@ a:focus-visible,
 .preview p,
 .detail p {
   margin: 8px 0;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 .detail a,
 .preview a {
@@ -453,6 +452,10 @@ a:focus-visible,
 .detail a:hover,
 .preview a:hover {
   text-decoration: underline;
+}
+.detail .has-text-danger,
+.preview .has-text-danger {
+  font-weight: 700;
 }
 
 /* ============ FAQ: summary as a soft pill, + / - as a badge ============ */
@@ -507,12 +510,24 @@ details[open] summary::after {
   background-size: 12px 2px;
   border-color: #99f6e4;
 }
-details > div,
-details p {
-  margin: 12px 4px 2px;
+details > div {
+  margin: 10px 0 2px;
+  padding: 12px 14px;
+  background: var(--bulma-scheme-main-ter);
+  border: 1px solid var(--bulma-border-weak);
+  border-radius: 10px;
   color: var(--theme-text-soft);
   font-size: 14px;
   line-height: 1.7;
+}
+details > div p {
+  margin: 8px 0;
+}
+details > div p:first-child {
+  margin-top: 0;
+}
+details > div p:last-child {
+  margin-bottom: 0;
 }
 
 /* FAQ card head: buttons are right-aligned via Bulma .buttons.is-right
@@ -584,8 +599,9 @@ details p {
   z-index: 20;
 }
 .savebar-inner {
-  max-width: 760px;
-  margin: 0 auto;
+  /* Width and centring come from Bulma .container.is-max-tablet
+     in edit.html, matching the edit content column. No custom
+     max-width here, so the save bar cannot drift from the form. */
 }
 /* Savebar per Bulma Form general, has-addons + is-expanded:
    <div class="field has-addons">
@@ -783,7 +799,8 @@ details p {
   height: 26px;
   border-radius: 9999px;
   background: var(--bulma-scheme-main-bis);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--bulma-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   z-index: 0;
 }
 .theme-switch-group[data-active="dark"] .theme-switch-thumb {
@@ -811,12 +828,14 @@ details p {
   font-size: 14px;
   line-height: 1;
   cursor: pointer;
+  opacity: 0.55;
 }
 .theme-switch-group button:hover {
   color: var(--bulma-text);
 }
 .theme-switch-group button.is-active {
   color: var(--bulma-text-strong);
+  opacity: 1;
 }
 .theme-switch-group button:focus-visible {
   outline: 2px solid var(--bulma-primary);
@@ -838,6 +857,13 @@ details p {
 }
 [data-theme="dark"] .site-container > .title::after {
   background: linear-gradient(90deg, #2dd4bf, #e5a83b);
+}
+[data-theme="dark"] .footer {
+  color: var(--bulma-text-weak);
+}
+[data-theme="dark"] .detail .has-text-danger,
+[data-theme="dark"] .preview .has-text-danger {
+  color: #fca5a5 !important;
 }
 [data-theme="dark"] details[open] summary {
   color: var(--theme-link);
