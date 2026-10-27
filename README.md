@@ -71,7 +71,16 @@
 | `bulma.min.css` | 官方 Bulma 1.0.4 本地文件，不要改；要改样式只改主题文件 |
 | `bulma-theme.css` | 唯一自定义样式文件 |
 | `.nojekyll` | 让 Pages 不用 Jekyll 处理 |
+| `sitemap.xml` | 只含主页，供搜索引擎发现；不要把 `edit.html` 放进来 |
+| `robots.txt` | 允许抓取主页，禁止抓取 `edit.html`，并指明 sitemap 地址 |
 | `README.md` | 本文件 |
+
+## SEO：关键词与收录
+
+- 页面标题在 `data/site.json` 的 `title` 里，主页 JS 会用它同时改浏览器标题和页面 H1，所以改标题要改数据，不要只改 `index.html` 里的静态标题。
+- 关键词只写在 `index.html` 的 `meta keywords` 和 JSON-LD 里，顺序是：被染绿的幸福、染绿、妖者、张明、风千华、舒仪涵、顾爱如、佐含言。不要把人名列表堆到可见正文里，那会像关键词堆砌；可见正文只写一句自然的“支持作品：《被染绿的幸福》，作者：妖者。”
+- `edit.html` 本身已有 `noindex`，`robots.txt` 也禁止抓取它，`sitemap.xml` 只含主页，不要把编辑页加进 sitemap。
+- 加这些只能帮助被收录，不能保证某个词排到第几名；收录和排名还要等搜索引擎重新抓取，时间通常是几天到几周，之后可以在搜索引擎的站长工具里提交 sitemap。
 
 ## 主题：浅色 / 深色 / 跟随系统
 
