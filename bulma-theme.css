@@ -184,13 +184,23 @@
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
   }
   .site-section .site-container {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+  }
+  /* The footer absorbs all free space above itself (margin-top:
+     auto) instead of space-between spreading the free space between
+     every block. Blocks stack from the top with their fixed gaps,
+     so their positions never depend on total content height: when
+     the FAQ card grows once data/site.json arrives, only the free
+     space above the footer shrinks and nothing above it moves.
+     (space-between here was the refresh jitter: first paint spread
+     the short skeleton over 100dvh, then the filled page had to
+     re-distribute every gap and the middle content jumped.) */
+  .site-section .site-container > .footer {
+    margin-top: auto;
   }
 }
 
