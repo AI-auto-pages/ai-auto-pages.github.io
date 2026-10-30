@@ -184,24 +184,33 @@
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
   }
   .site-section .site-container {
     flex: 1;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
   }
-  /* The footer absorbs all free space above itself (margin-top:
-     auto) instead of space-between spreading the free space between
-     every block. Blocks stack from the top with their fixed gaps,
-     so their positions never depend on total content height: when
-     the FAQ card grows once data/site.json arrives, only the free
-     space above the footer shrinks and nothing above it moves.
-     (space-between here was the refresh jitter: first paint spread
-     the short skeleton over 100dvh, then the filled page had to
-     re-distribute every gap and the middle content jumped.) */
-  .site-section .site-container > .footer {
-    margin-top: auto;
-  }
+}
+
+/* ============ Reveal gate: page and data appear together ============
+   The wide layout above spreads the blocks over the full viewport
+   height with space-between, so if the short static skeleton were
+   painted first and data/site.json filled the FAQ card in a moment
+   later, every gap would be re-distributed and the middle content
+   would visibly jump (the refresh jitter). Instead the section
+   stays visibility:hidden - layout is still computed at full size,
+   only the paint is held back - until the main script has loaded
+   the data, populated the page and added .ready to <html> (see
+   index.html; the fetch already starts in <head>, in parallel with
+   the stylesheets, so in practice the gate opens at the same moment
+   the first paint would have happened). A 3s timer in the head
+   script and the noscript style in index.html are the safety nets,
+   so the page can never stay hidden. The edit page is unaffected:
+   it uses .edit-section, not .site-section. */
+html:not(.ready) .site-section {
+  visibility: hidden;
 }
 
 /* ============ Site title: solid ink for readability, with a centred
